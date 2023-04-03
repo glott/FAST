@@ -1,0 +1,20 @@
+########## FAST CONFIGURATION FILE ##########
+# Any characters after the '=' are included #
+# Place this file in your Downloads folder  #
+# Documentation found at the URL below      #
+# https://github.com/vzoa/FAST/README.md    #
+#############################################
+
+################# DEP SCRAPE ################
+FLIGHTAWARE_USER=joshglott
+FLIGHTAWARE_PASS=
+AIRPORT=KSFO
+
+############## VNAS DEP UPLOAD ##############
+VATSIM_USER=1275389
+VATSIM_PASS=
+ARTCC=ZOA
+SCENARIO=01GWZ74ESXBS99PHQSFWPG92MB
+CSV_FILE=SFO_DEP_230403-1530
+TIME_COMPRESSION=4
+TIME_OFFSET=0
