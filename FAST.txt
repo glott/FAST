@@ -5,16 +5,18 @@
 # https://github.com/vzoa/FAST/README.md    #
 #############################################
 
+SLOW_INTERNET_FACTOR=1
+
 ################# DEP SCRAPE ################
 FLIGHTAWARE_USER=username
 FLIGHTAWARE_PASS=password
 AIRPORT=KSFO
 
-############## VNAS DEP UPLOAD ##############
+################  DEP UPLOAD ################
 VATSIM_USER=1234567
 VATSIM_PASS=000000
 ARTCC=ZOA
-SCENARIO=01GWZ74ESXBS99PHQSFWPG92MB
+SCENARIO=00000000000000000000000000
 CSV_FILE=SFO_DEP_230403-1530
 TIME_COMPRESSION=4
 TIME_OFFSET=0
