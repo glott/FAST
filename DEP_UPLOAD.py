@@ -1,6 +1,9 @@
 # IMPORTS AND COMMON FUNCTIONS
-import imp, os, subprocess, sys, time, random, pathlib, csv, re
+import os, subprocess, sys, time, random, pathlib, csv, re, warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 try:
+    import imp
     imp.find_module('selenium')
     imp.find_module('webdriver_manager')
 except ImportError:
@@ -30,31 +33,38 @@ def between(text, start, end):
 def click_button(text):
     driver.find_element('xpath', 
         '//button[contains(text(), \'' + text + '\')]').click()
+    
+sleep_factor = float(read_config_value('SLOW_INTERNET_FACTOR'))
 
-# WEB DRIVER OPEN
+# OPEN BROWSER
+print('-------------------- FAST --------------------')
+print('Opening browser.')
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install());
 driver.minimize_window()
-os.system('cls');
 
 # LOGIN TO VATSIM AND vNAS
+print('Opening vNAS login page.')
 driver.get('https://data-admin.virtualnas.net/login')
 
 driver.find_element('class name', 'btn-success').click()
-time.sleep(5)
+time.sleep(sleep_factor * 5)
 
 try:
+    print('Logging in to VATSIM.')
     driver.find_element('id', 'cid') \
         .send_keys(read_config_value('VATSIM_USER'))
     driver.find_element('id', 'password') \
         .send_keys(read_config_value('VATSIM_PASS'))
     click_button('Sign in')
+    print('Successfully logged in to VATSIM.')
 except Exception:
-    pass
+    print('Unsuccessfully logged in to FlightAware.')
 
-time.sleep(2.5)
+time.sleep(sleep_factor * 2.5)
 
 try:
     ARTCC = read_config_value('ARTCC')
+    print('Selecting ' + ARTCC + ' ARTCC.')
     menu = driver.find_element('class name', 'artcc-menu')
     nav_link = menu.find_element('class name', 'nav-link').click()
     dropdown = menu.find_element('class name', 'dropdown-menu')
@@ -66,7 +76,7 @@ try:
 except Exception:
     pass
 
-time.sleep(2.5)
+time.sleep(sleep_factor * 2.5)
 
 # UPLOAD DATA TO vNAS
 def get_plane_id():
@@ -88,17 +98,19 @@ def set_data_drop(pos, header, value):
         + header + '\']').find_element('xpath', '..')) \
         .select_by_value(value)
 
+print('Opening scenario ' + read_config_value('SCENARIO') + '.')
 driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
            + read_config_value('SCENARIO'))
 
 f = open(downloads_folder + '\\' + read_config_value('CSV_FILE'), 'r')
 reader = csv.DictReader(f, delimiter=',')
-time.sleep(2.5)
+time.sleep(sleep_factor * 2.5)
 driver.execute_script("window.scrollTo(0, 250);")
-time.sleep(1)
+time.sleep(sleep_factor * 1)
 
 for plane in reader:
     click_button('Add Aircraft')
+    print('Uploading data for ' + plane['ident'] + '.')
     
     pos = get_plane_id()
     set_data(pos, 'aircraftId', plane['ident'])
@@ -142,5 +154,6 @@ for plane in reader:
 click_button('Save')
 f.close()
 
-time.sleep(10)
+print('Data upload to vNAS complete!')
+time.sleep(sleep_factor * 5)
 driver.quit()

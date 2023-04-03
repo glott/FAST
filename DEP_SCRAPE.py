@@ -1,6 +1,9 @@
 # IMPORTS AND COMMON FUNCTIONS
-import imp, os, subprocess, sys, time, random, pathlib, csv, re
+import os, subprocess, sys, time, random, pathlib, csv, re, warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 try:
+    import imp
     imp.find_module('selenium')
     imp.find_module('webdriver_manager')
 except ImportError:
@@ -30,13 +33,17 @@ def between(text, start, end):
 def click_button(text):
     driver.find_element('xpath', 
         '//button[contains(text(), \'' + text + '\')]').click()
+    
+sleep_factor = float(read_config_value('SLOW_INTERNET_FACTOR'))
 
-# WEB DRIVER OPEN
+# OPEN BROWSER
+print('-------------------- FAST --------------------')
+print('Opening browser.')
 driver = webdriver.Firefox(executable_path=GeckoDriverManager().install());
 driver.minimize_window()
-os.system('cls');
 
 # GENERATE AIRCRAFT URLs
+print('Logging in to FlightAware.')
 url = 'https://flightaware.com/live/airport/' \
     + read_config_value('AIRPORT') + '/scheduled'
 
@@ -47,7 +54,9 @@ driver.find_element('name', 'flightaware_username') \
 driver.find_element('name', 'flightaware_password') \
     .send_keys(read_config_value('FLIGHTAWARE_PASS'))
 driver.find_element('id', 'loginButton').click()
-time.sleep(5)
+print('Successfully logged in to FlightAware.')
+
+time.sleep(sleep_factor * 5)
 
 plane_urls = driver.find_elements('xpath', '//a[@href]')
 filtered_urls = list()
@@ -60,6 +69,8 @@ for plane_url in plane_urls:
 s = 'ident,type,dep,arr,alt,speed,route,spawn-delay,gate,' \
     + 'push-taxiway,taxi-route'
 init_spawn_delay = 0
+
+print('Scraping departure data at ' + read_config_value('AIRPORT') + '.')
 
 def get_plane_info(source):
     temp_text = source[source.rindex(r'"route"') - 3000:
@@ -81,21 +92,23 @@ def get_plane_info(source):
     
     if init_spawn_delay == 0: init_spawn_delay = delay
 
-    return ','.join([ident, acft, dep, arr, alt, speed, route, \
-                     str(spawn_delay), gate, '', ''])
+    return ','.join([ident, acft, dep, arr, alt.replace('null0', ''), 
+                     speed, route, str(spawn_delay), gate, '', ''])
 
 for filtered_url in filtered_urls:
     driver.get(filtered_url)
     plane = get_plane_info(driver.page_source)
     s += '\n' + plane
-    print(plane.split(',')[0] + '\t' + plane.split(',')[2] + '-' \
-          + plane.split(',')[3])
-    time.sleep(random.uniform(1, 5))
-    
-with open(downloads_folder + '\\' + s.split('\n')[1].split(',')[2][1:] \
-          + '_DEP_' + time.strftime('%y%m%d-%H%M', time.gmtime()) \
-          + '.csv', 'w') as f:
+    print('Scraped ' + plane.split(',')[0] + '\t' \
+        + plane.split(',')[2] + '-' + plane.split(',')[3] + ', ' \
+        + plane.split(',')[1] + ', ' + plane.split(',')[4])
+    time.sleep(sleep_factor * random.uniform(1, 5))
+
+out_file = s.split('\n')[1].split(',')[2][1:] + '_DEP_' \
+    + time.strftime('%y%m%d-%H%M', time.gmtime()) + '.csv'
+print('Writing aircraft data to ' + str(out_file) + '.')
+with open(downloads_folder + '\\' + out_file, 'w') as f: 
     f.write(s)
-    
-time.sleep(10)
+
+print('Departure scraping complete!')
 driver.quit()
