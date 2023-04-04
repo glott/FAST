@@ -2,7 +2,7 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.1.0** - 04/04/2023
+**Version 0.1.4** - 04/04/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*. 
 
@@ -12,7 +12,7 @@ __[Download](https://github.com/vzoa/FAST/releases)__
 ### Installation
 
 1) Download and unzip the `FAST.zip` package from the link above or on this repository's [releases](https://github.com/vzoa/FAST/releases) page. 
-2) Move the `FAST` folder to a directory of your choosing. The `FAST.txt` configuration file must be saved in the `FAST` folder **\[not working as of 04/04/23\]** or in your `Downloads` folder.  
+2) Move the `FAST` folder to a directory of your choosing. The `FAST.txt` configuration file must be saved in the `FAST` folder or in your `Downloads` folder.  
 3) Download and install the latest version of [Python](https://www.python.org/downloads/). 
 4) Download and install the latest version of [Firefox](https://www.mozilla.org/en-US/firefox/new/).
 
@@ -34,7 +34,7 @@ __[Download](https://github.com/vzoa/FAST/releases)__
 
 #### General Information
 
-- The `FAST.txt` configuration file must be saved in the `FAST` folder **\[not working as of 04/04/23\]** or in your `Downloads` folder. 
+- The `FAST.txt` configuration file must be saved in the `FAST` folder or in your `Downloads` folder. 
 
 - Each configuration line is composed of a key and value, separated by an equals sign (`=`). e.g. `AIRPORT=KSFO`, `AIRPORT` is the key and `KSFO` is the value.  
 
