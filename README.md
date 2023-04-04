@@ -110,9 +110,9 @@ __[Download](https://github.com/vzoa/FAST/releases)__
 
 - This is useful for spawning in more departures than an airport may typically see in a certain period of time for training purposes
 
-`TIME_OFFSET`: all spawn delays are offset (sooner) by this amount of time in seconds, applied after `TIME_COMPRESSION` where all spawn delays less than this value immediately spawn
+`TIME_OFFSET`: all spawn delays are offset (sooner) by this amount of time in seconds; this is applied after the `TIME_COMPRESSION` above; all spawn delays less than the offset spawn immediately
 
-- `TIME_OFFSET=600`: all aircraft spawn `600` seconds sooner after `TIME_COMPRESSION`; an aircraft with a spawn delay of `300` seconds would spawn immediately; an aircraft with a spawn delay of `1250` seconds would spawn after `650` seconds
+- `TIME_OFFSET=600`: all aircraft spawn `600` seconds sooner (after `TIME_COMPRESSION` is applied); an aircraft with a spawn delay of `300` seconds would spawn immediately; an aircraft with a spawn delay of `1250` seconds would spawn after `650` seconds
 
 #### `ARR SCRAPE` Configuration Settings
 
