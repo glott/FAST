@@ -6,7 +6,7 @@ _by [Josh Glottmann](https://github.com/glott)_
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*. 
 
-__[Download](https://github.com/vzoa/FAST/releases)__ 
+__[Download v0.1.4](https://github.com/vzoa/FAST/releases/download/v0.1.4/FAST.zip)__ 
 
 ---
 ### Installation
