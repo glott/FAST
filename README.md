@@ -11,7 +11,7 @@ __[Download v0.1.4](https://github.com/vzoa/FAST/releases/download/v0.1.4/FAST.z
 ---
 ### Installation
 
-1) Download and unzip the `FAST.zip` package from the link above or on this repository's [releases](https://github.com/vzoa/FAST/releases) page. 
+1) Download and unzip the `FAST.zip` package from the link above or on this repository's [releases](https://github.com/vzoa/FAST/releases/latest) page. 
 2) Move the `FAST` folder to a directory of your choosing. The `FAST.txt` configuration file must be saved in the `FAST` folder or in your `Downloads` folder.  
 3) Download and install the latest version of [Python](https://www.python.org/downloads/). 
 4) Download and install the latest version of [Firefox](https://www.mozilla.org/en-US/firefox/new/).
