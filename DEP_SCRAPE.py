@@ -1,5 +1,5 @@
 # IMPORTS AND COMMON FUNCTIONS
-import os, subprocess, sys, time, random, pathlib, csv, re, warnings
+import os, subprocess, sys, time, random, pathlib, csv, re, warnings, random
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 try:
@@ -66,8 +66,8 @@ for plane_url in plane_urls:
         filtered_urls.append(href)
 
 # CREATE AIRCRAFT DATA FILE
-s = 'ident,type,dep,arr,alt,speed,route,spawn-delay,gate,' \
-    + 'push-taxiway,taxi-route'
+s = 'ident,type,dep,arr,alt,speed,route,rules,equip,spawn-delay,' \
+    + 'gate,push-taxiway,taxi-route'
 init_spawn_delay = 0
 
 print('Scraping departure data at ' + read_config_value('AIRPORT') + '.')
@@ -86,14 +86,16 @@ def get_plane_info(source):
     spawn_delay = 0 if init_spawn_delay == 0 else delay - init_spawn_delay
     dep = between(source, r'name="origin" content="', r'"')
     arr = between(source, r'name="destination" content="', r'"')
+    if len(arr) == 0: arr = 'ZZZZ'
     acft = between(source, r'name="aircrafttype" content="', r'"')
+    if len(acft) == 0: acft = 'ZZZZ'
     gate = 'UNKN' if not r'","gate":"' in source \
         else between(source, dep + r'","gate":"', r'"')
     
     if init_spawn_delay == 0: init_spawn_delay = delay
 
-    return ','.join([ident, acft, dep, arr, alt.replace('null0', ''), 
-                     speed, route, str(spawn_delay), gate, '', ''])
+    return ','.join([ident, acft, dep, arr, alt.replace('null0', ''), speed,
+                     route, 'I', 'L', str(spawn_delay), gate, '', ''])
 
 for filtered_url in filtered_urls:
     driver.get(filtered_url)

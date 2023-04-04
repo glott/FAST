@@ -1,5 +1,5 @@
 # IMPORTS AND COMMON FUNCTIONS
-import os, subprocess, sys, time, random, pathlib, csv, re, warnings
+import os, subprocess, sys, time, random, pathlib, csv, re, warnings, random
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 try:
@@ -102,7 +102,9 @@ print('Opening scenario ' + read_config_value('SCENARIO') + '.')
 driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
            + read_config_value('SCENARIO'))
 
-f = open(downloads_folder + '\\' + read_config_value('CSV_FILE'), 'r')
+file_in = read_config_value('CSV_FILE')
+if '.' not in file_in: file_in += '.csv'
+f = open(downloads_folder + '\\' + file_in, 'r')
 reader = csv.DictReader(f, delimiter=',')
 time.sleep(sleep_factor * 2.5)
 driver.execute_script("window.scrollTo(0, 250);")
@@ -127,12 +129,17 @@ for plane in reader:
         click_button('Create Flight Plan')
     except Exception:
         pass
-
+    
+    if 'I' in plane['rules']: 
+        set_data_drop(pos, 'DVFR', 'IFR')
+    else: 
+        set_data_drop(pos, 'DVFR', 'VFR')
     set_data(pos, 'flightplan.departure', plane['dep'])
     set_data(pos, 'flightplan.destination', plane['arr'])
     set_data(pos, 'flightplan.cruiseAltitude', plane['alt'])
     set_data(pos, 'flightplan.cruiseSpeed', plane['speed'])
-    set_data(pos, 'flightplan.aircraftType', plane['type'] + '/L')
+    set_data(pos, 'flightplan.aircraftType', plane['type'] \
+        + '/' + plane['equip'])
     set_data(pos, 'flightplan.route', plane['route'])
     set_data(pos, 'flightplan.remarks', '/v/')
     set_data_drop(pos, 'Coordinates', 'Parking')
@@ -155,5 +162,3 @@ click_button('Save')
 f.close()
 
 print('Data upload to vNAS complete!')
-time.sleep(sleep_factor * 5)
-driver.quit()
