@@ -80,7 +80,7 @@ __[Download v0.1.4](https://github.com/vzoa/FAST/releases/download/v0.1.4/FAST.z
 
 `VFR_TYPES`: a list of possible VFR departure aircraft types separated by commas (`,`) with each aircraft type including a weighting following the type code and a colon (`:`)
 
-- `VFR_TYPES=C172:500,C182:350,P28A:150`: in this example, a `C172` is twice as likely (`500/1000`) to be generated than a `C182` (`350/1000`) or `P28A` (`150/1000`)
+- `VFR_TYPES=C172:500,C182:300,P28A:200`: in this example, a `C172` (`500/1000`) is 1.67 times more likely to be generated than a `C182` (`300/1000`) and 2.5 times more likely than a `P28A` (`200/1000`)
 
 - `VFR_TYPES=C172:1,C182:1,P28A:1`: in this example, all aircraft are equally likely (`1/3`) of being generated
 
