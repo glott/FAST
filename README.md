@@ -2,19 +2,19 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.1.4** - 04/04/2023
+**Version 0.1.5** - 04/04/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*. 
 
-__[Download v0.1.4](https://github.com/vzoa/FAST/releases/download/v0.1.4/FAST.zip)__ 
+__[Download v0.1.5](https://github.com/glott/FAST/releases/download/v0.1.5/FAST.zip)__ 
 
 ---
 ### Installation
 
-1) Download and unzip the `FAST.zip` package from the link above or on this repository's [releases](https://github.com/vzoa/FAST/releases/latest) page. 
+1) Download and unzip the `FAST.zip` package from the link above or on this repository's [releases](https://github.com/glott/FAST/releases/latest) page. 
 2) Move the `FAST` folder to a directory of your choosing. The `FAST.txt` configuration file must be saved in the `FAST` folder or in your `Downloads` folder.  
 3) Download and install the latest version of [Python](https://www.python.org/downloads/). 
-4) Download and install the latest version of [Firefox](https://www.mozilla.org/en-US/firefox/new/).
+4) Download and install the latest version of [Firefox](https://www.mozilla.org/en-US/firefox/new/) or [Chrome](https://www.google.com/chrome/).
 
 ---
 ### File Descriptions/Usage
@@ -47,6 +47,10 @@ __[Download v0.1.4](https://github.com/vzoa/FAST/releases/download/v0.1.4/FAST.z
 `AIRPORT`: the specified airport for the scenario being generated
 
 - `AIRPORT=KSFO`: `KSFO` is the specified airport
+
+`BROWSER`: the specified browser to utilize
+
+- `BROWSER=Firefox`: `Firefox` or `Chrome` are acceptable values (case insensitive)
 
 `SLOW_INTERNET_FACTOR`: this value slows down page loading when increased, which may be necessary to download/upload data
 
@@ -125,4 +129,4 @@ __[Download v0.1.4](https://github.com/vzoa/FAST/releases/download/v0.1.4/FAST.z
 `ROUTER`: information TBD
 
 ---
-*\* Josh Glottmann and vZOA are not responsible for any misuse of this software.*
+*\* Josh Glottmann is not responsible for any misuse of this software.*

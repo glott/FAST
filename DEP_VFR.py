@@ -15,6 +15,7 @@ except ImportError:
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 
 working_directory = ''
 if os.path.isfile(os.getcwd() + '\\FAST.txt'):

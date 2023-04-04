@@ -15,6 +15,7 @@ except ImportError:
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 
 working_directory = ''
 if os.path.isfile(os.getcwd() + '\\FAST.txt'):
@@ -46,8 +47,19 @@ sleep_factor = float(read_config_value('SLOW_INTERNET_FACTOR'))
 
 # OPEN BROWSER
 print('-------------------- FAST --------------------')
-print('Opening browser.')
-driver = webdriver.Firefox(executable_path=GeckoDriverManager().install());
+browser = read_config_value('BROWSER').capitalize()
+print('Opening ' + browser + '.')
+
+driver = None
+if 'C' in browser:
+    options = webdriver.chrome.options.Options()
+    options.add_argument('--ignore-certificate-errors')
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), \
+        options=options);
+else:
+    driver = webdriver.Firefox(executable_path=GeckoDriverManager() \
+        .install());
 driver.minimize_window()
 
 # LOGIN TO VATSIM AND vNAS

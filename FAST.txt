@@ -2,10 +2,11 @@
 # Any characters after the '=' are utilized #
 # Place file in your Downloads/FAST folder  #
 # Documentation found at the URL below      #
-# https://github.com/vzoa/FAST#readme       #
+# https://github.com/glott/FAST#readme      #
 #############################################
 
 AIRPORT=KSFO
+BROWSER=Firefox
 SLOW_INTERNET_FACTOR=1
 
 ################# DEP SCRAPE ################
