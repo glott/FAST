@@ -1,6 +1,6 @@
 # IMPORTS AND COMMON FUNCTIONS
 import os, subprocess, sys, time, random, pathlib, csv, re, warnings, random
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 try:
     import imp
@@ -16,10 +16,18 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.firefox import GeckoDriverManager
 
-downloads_folder = str(pathlib.Path.home() / 'Downloads')
+working_directory = ''
+if os.path.isfile(os.getcwd() + '\\FAST.txt'):
+    working_directory = os.getcwd()
+elif os.path.isfile(str(pathlib.Path.home() / 'Downloads\\FAST.txt')):
+    working_directory = str(pathlib.Path.home() / 'Downloads')
+else:
+    print('FAST.txt file not found!\nPlace valid FAST.txt file in this ' \
+          + 'folder or in your Downloads folder.\nDefault file:' \
+          + ' https://raw.githubusercontent.com/vzoa/FAST/main/FAST.txt')
 
 def read_config_value(key):
-    config = open(downloads_folder + '\\FAST.txt', 'r').read()
+    config = open(working_directory + '\\FAST.txt', 'r').read()
     if key + '=' in config:
         return config.split(key + '=')[1].split('\n')[0]
     return 'NULL'
@@ -104,7 +112,7 @@ driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
 
 file_in = read_config_value('CSV_FILE')
 if '.' not in file_in: file_in += '.csv'
-f = open(downloads_folder + '\\' + file_in, 'r')
+f = open(working_directory + '\\' + file_in, 'r')
 reader = csv.DictReader(f, delimiter=',')
 time.sleep(sleep_factor * 2.5)
 driver.execute_script("window.scrollTo(0, 250);")
