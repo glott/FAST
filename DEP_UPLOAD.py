@@ -138,8 +138,8 @@ for plane in reader:
     set_data(pos, 'flightplan.destination', plane['arr'])
     set_data(pos, 'flightplan.cruiseAltitude', plane['alt'])
     set_data(pos, 'flightplan.cruiseSpeed', plane['speed'])
-    set_data(pos, 'flightplan.aircraftType', plane['type'] \
-        + '/' + plane['equip'])
+    equip = '/' + plane['equip'] if len(plane['equip']) > 0 else ''
+    set_data(pos, 'flightplan.aircraftType', plane['type'] + equip)
     set_data(pos, 'flightplan.route', plane['route'])
     set_data(pos, 'flightplan.remarks', '/v/')
     set_data_drop(pos, 'Coordinates', 'Parking')

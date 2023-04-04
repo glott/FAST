@@ -106,7 +106,7 @@ for filtered_url in filtered_urls:
         + plane.split(',')[1] + ', ' + plane.split(',')[4])
     time.sleep(sleep_factor * random.uniform(1, 5))
 
-out_file = s.split('\n')[1].split(',')[2][1:] + '_DEP_' \
+out_file = s.split('\n')[1].split(',')[2][1:] + '_DEP_IFR_' \
     + time.strftime('%y%m%d-%H%M', time.gmtime()) + '.csv'
 print('Writing aircraft data to ' + str(out_file) + '.')
 with open(downloads_folder + '\\' + out_file, 'w') as f: 
