@@ -55,8 +55,8 @@ if 'C' in browser:
     options = webdriver.chrome.options.Options()
     options.add_argument('--ignore-certificate-errors')
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
-    driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(), \
-        options=options);
+    driver = webdriver.Chrome(executable_path=ChromeDriverManager()
+        .install(), options=options);
 else:
     driver = webdriver.Firefox(executable_path=GeckoDriverManager() \
         .install());
