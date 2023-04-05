@@ -25,7 +25,7 @@ elif os.path.isfile(str(pathlib.Path.home() / 'Downloads\\FAST.txt')):
 else:
     print('FAST.txt file not found!\nPlace valid FAST.txt file in this ' \
           + 'folder or in your Downloads folder.\nDefault file:' \
-          + ' https://raw.githubusercontent.com/vzoa/FAST/main/FAST.txt')
+          + ' https://raw.githubusercontent.com/glott/FAST/main/FAST.txt')
 
 def read_config_value(key):
     config = open(working_directory + '\\FAST.txt', 'r').read()
@@ -40,8 +40,11 @@ def between(text, start, end):
         return ''
     
 def click_button(text):
-    driver.find_element('xpath', 
-        '//button[contains(text(), \'' + text + '\')]').click()
+    try: 
+        driver.find_element('xpath', 
+            '//button[contains(text(), \'' + text + '\')]').click()
+    except Exception:
+        print('Unable to click button \'' + text + '\'.')
     
 sleep_factor = float(read_config_value('SLOW_INTERNET_FACTOR'))
 

@@ -2,11 +2,11 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.1.5** - 04/04/2023
+**Version 0.1.6** - 04/05/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*. 
 
-__[Download v0.1.5](https://github.com/glott/FAST/releases/download/v0.1.5/FAST.zip)__ 
+__[Download v0.1.6](https://github.com/glott/FAST/releases/download/v0.1.6/FAST.zip)__ 
 
 ---
 ### Installation

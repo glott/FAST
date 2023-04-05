@@ -25,7 +25,7 @@ elif os.path.isfile(str(pathlib.Path.home() / 'Downloads\\FAST.txt')):
 else:
     print('FAST.txt file not found!\nPlace valid FAST.txt file in this ' \
           + 'folder or in your Downloads folder.\nDefault file:' \
-          + ' https://raw.githubusercontent.com/vzoa/FAST/main/FAST.txt')
+          + ' https://raw.githubusercontent.com/glott/FAST/main/FAST.txt')
 
 def read_config_value(key):
     config = open(working_directory + '\\FAST.txt', 'r').read()
@@ -40,8 +40,11 @@ def between(text, start, end):
         return ''
     
 def click_button(text):
-    driver.find_element('xpath', 
-        '//button[contains(text(), \'' + text + '\')]').click()
+    try: 
+        driver.find_element('xpath', 
+            '//button[contains(text(), \'' + text + '\')]').click()
+    except Exception:
+        print('Unable to click button \'' + text + '\'.')
     
 sleep_factor = float(read_config_value('SLOW_INTERNET_FACTOR'))
 
@@ -106,15 +109,20 @@ def get_plane_info(source):
     spawn_delay = 0 if init_spawn_delay == 0 else delay - init_spawn_delay
     dep = between(source, r'name="origin" content="', r'"')
     arr = between(source, r'name="destination" content="', r'"')
-    if len(arr) == 0: arr = 'ZZZZ'
     acft = between(source, r'name="aircrafttype" content="', r'"')
-    if len(acft) == 0: acft = 'ZZZZ'
     gate = 'UNKN' if not r'","gate":"' in source \
         else between(source, dep + r'","gate":"', r'"')
+
+    alt = alt.replace('null0', '')
+    if len(speed) == 0: speed = '0'
+    if len(dep) == 0: dep = 'ZZZZ'
+    if len(arr) == 0: arr = 'ZZZZ'
+    if len(acft) == 0: acft = 'ZZZZ'
+    if len(gate) == 0: gate = 'UNKN'
     
     if init_spawn_delay == 0: init_spawn_delay = delay
 
-    return ','.join([ident, acft, dep, arr, alt.replace('null0', ''), speed,
+    return ','.join([ident, acft, dep, arr, , speed,
                      route, 'I', 'L', str(spawn_delay), gate, '', ''])
 
 for filtered_url in filtered_urls:
