@@ -94,7 +94,7 @@ try:
 except Exception:
     print('Unsuccessfully logged in to VATSIM.')
 
-wait(w=2.5)
+wait(w=5)
 
 try:
     ARTCC = read_config_value('ARTCC')
@@ -103,6 +103,7 @@ try:
     driver.find_element('xpath', \
         '//div[@class=\'nav-item dropdown artcc-menu\']') \
         .find_element('class name', 'nav-link').click()
+    wait()
     dropdown = driver.find_element('xpath', \
         '//div[@class=\'dropdown-menu dropdown-menu-right ' \
         + 'dropdown-menu-md show\']')
