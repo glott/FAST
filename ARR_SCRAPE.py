@@ -159,12 +159,12 @@ def get_plane_info(source):
     gate = 'UNKN' if not r'","gate":"' in temp_text \
         else between(temp_text, arr + r'","gate":"', r'","term')
     
-    alt = alt.replace('null0', '')
-    if len(speed) == 0: speed = '0'
-    if len(dep) == 0: dep = 'ZZZZ'
-    if len(arr) == 0: arr = 'ZZZZ'
-    if len(acft) == 0: acft = 'ZZZZ'
-    if len(gate) == 0: gate = 'UNKN'
+    if len(alt) == 0 or 'null' in alt: alt = '0'
+    if len(speed) == 0 or 'null' in speed: speed = '0'
+    if len(dep) == 0 or 'null' in dep: dep = 'ZZZZ'
+    if len(arr) == 0 or 'null' in arr: arr = 'ZZZZ'
+    if len(acft) == 0 or 'null' in acft: acft = 'ZZZZ'
+    if len(gate) == 0 or 'null' in gate: gate = 'UNKN'
     
     ralt, rtime, rspeed, hdg, lat, lon = -1, -1, -1, 0, 0, 0
     try:
