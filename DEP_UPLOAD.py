@@ -137,13 +137,13 @@ def set_data_drop(pos, header, value):
         + header + '\']').find_element('xpath', '..')) \
         .select_by_value(value)
 
-print('Opening scenario ' + read_config_value('SCENARIO') + '.')
+print('Opening scenario ' + read_config_value('DEP_SCENARIO') + '.')
 driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
-           + read_config_value('SCENARIO'))
+           + read_config_value('DEP_SCENARIO'))
 
 wait()
 
-file_in = read_config_value('CSV_FILE')
+file_in = read_config_value('DEP_CSV_FILE')
 if '.' not in file_in: file_in += '.csv'
 f = open(working_directory + '\\' + file_in, 'r')
 reader = csv.DictReader(f, delimiter=',')
@@ -159,8 +159,8 @@ for plane in reader:
     set_data(pos, 'aircraftType', plane['type'])
     set_data_drop(pos, 'Standby', 'Standby')
     true_spawn_delay = round(int(plane['spawn-delay']) \
-        / float(read_config_value('TIME_COMPRESSION')) \
-        - int(read_config_value('TIME_OFFSET')))
+        / float(read_config_value('DEP_TIME_COMPRESSION')) \
+        - int(read_config_value('DEP_TIME_OFFSET')))
     if true_spawn_delay < 0: true_spawn_delay = 0
     set_data(pos, 'spawnDelay', true_spawn_delay)
     set_data(pos, 'airportId', plane['dep'][1:])

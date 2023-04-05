@@ -1,11 +1,12 @@
 ########## FAST CONFIGURATION FILE ##########
 # Any characters after the '=' are utilized #
 # Place file in your Downloads/FAST folder  #
-# Documentation found at the URL below      #
-# https://github.com/glott/FAST#readme      #
+#                                           #
+#   https://github.com/glott/FAST#readme    #
 #############################################
 
 AIRPORT=KSFO
+ARTCC=ZOA
 BROWSER=Firefox
 SLOW_INTERNET_FACTOR=1
 
@@ -23,13 +24,19 @@ VFR_TYPES=C172:18573,C182:12436,P28A:9580,C150:7512,P28R:6386,BE35:3467,BE36:346
 ################  DEP UPLOAD ################
 VATSIM_USER=1234567
 VATSIM_PASS=000000
-ARTCC=ZOA
-SCENARIO=01GX6E5E0HQKHRR3EA0V42VWPH
-CSV_FILE=SFO_DEP_IFR_230403-1530
-TIME_COMPRESSION=4
-TIME_OFFSET=0
+DEP_SCENARIO=01GX6E5E0HQKHRR3EA0V42VWPH
+DEP_CSV_FILE=SFO_DEP_IFR_230403-1530
+DEP_TIME_COMPRESSION=4
+DEP_TIME_OFFSET=0
 
 ################# ARR SCRAPE ################
 # FLIGHTAWARE_USER/PASS must be input above #
 INTERCEPT_ALT=4000
 ROUTER=SERFR:HEMAN:28L,BDEGA:HEMAN:28L,PIRAT:HEMAN:28L,DYAMD:CEPIN:28R,ARCHI:CEPIN:28R
+
+################  ARR UPLOAD ################
+#   VATSIM_USER/PASS must be input above    #
+ARR_SCENARIO=01GX6E5E0HQKHRR3EA0V42VWPH
+ARR_CSV_FILE=SFO_DEP_IFR_230403-1530
+ARR_TIME_COMPRESSION=2
+ARR_TIME_OFFSET=0
