@@ -62,7 +62,7 @@ if 'C' in browser:
         .install(), options=options);
 else:
     driver = webdriver.Firefox(executable_path=GeckoDriverManager() \
-        .install());
+        .install(), service_log_path=os.devnull);
 driver.minimize_window()
 
 # LOGIN TO VATSIM AND vNAS
