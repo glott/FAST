@@ -137,13 +137,13 @@ def set_data_drop(pos, header, value):
         + header + '\']').find_element('xpath', '..')) \
         .select_by_value(value)
 
-print('Opening scenario ' + read_config_value('DEP_SCENARIO') + '.')
+print('Opening scenario ' + read_config_value('ARR_SCENARIO') + '.')
 driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
-           + read_config_value('DEP_SCENARIO'))
+           + read_config_value('ARR_SCENARIO'))
 
 wait()
 
-file_in = read_config_value('DEP_CSV_FILE')
+file_in = read_config_value('ARR_CSV_FILE')
 if '.' not in file_in: file_in += '.csv'
 f = open(working_directory + '\\' + file_in, 'r')
 reader = csv.DictReader(f, delimiter=',')
@@ -157,13 +157,14 @@ for plane in reader:
     pos = get_plane_id()
     set_data(pos, 'aircraftId', plane['ident'])
     set_data(pos, 'aircraftType', plane['type'])
-    set_data_drop(pos, 'Standby', 'Standby')
+    set_data_drop(pos, 'Standby', 'C')
     true_spawn_delay = round(int(plane['spawn-delay']) \
-        / float(read_config_value('DEP_TIME_COMPRESSION')) \
-        - int(read_config_value('DEP_TIME_OFFSET')))
+        / float(read_config_value('ARR_TIME_COMPRESSION')) \
+        - int(read_config_value('ARR_TIME_OFFSET')))
     if true_spawn_delay < 0: true_spawn_delay = 0
     set_data(pos, 'spawnDelay', true_spawn_delay)
-    set_data(pos, 'airportId', plane['dep'][1:])
+    set_data(pos, 'airportId', plane['arr'][1:])
+    set_data(pos, 'expectedApproach', 'I' + plane['proc'])
 
     click_button('Create Flight Plan')
     
@@ -178,21 +179,37 @@ for plane in reader:
     equip = '/' + plane['equip'] if len(plane['equip']) > 0 else ''
     set_data(pos, 'flightplan.aircraftType', plane['type'] + equip)
     set_data(pos, 'flightplan.route', plane['route'])
-    set_data(pos, 'flightplan.remarks', '/v/')
-    set_data_drop(pos, 'Coordinates', 'Parking')
-    set_data(pos, 'startingConditions.parking', plane['gate'])
+    set_data(pos, 'flightplan.remarks', '/v/ Gate ' + plane['gate'])
     
-    if(len(plane['push-taxiway']) != 0):
+    set_data_drop(pos, 'Coordinates', 'Coordinates')
+    set_data(pos, 'startingConditions.coordinates.lat', plane['lat'])
+    set_data(pos, 'startingConditions.coordinates.lon', plane['lon'])
+    set_data(pos, 'startingConditions.altitude', plane['ralt'])
+    set_data(pos, 'startingConditions.speed', plane['rspeed'])
+    set_data(pos, 'startingConditions.heading', plane['hdg'])
+    set_data(pos, 'startingConditions.navigationPath', plane['dct'])
+    
+    crs = {}
+    for cr in read_config_value('CROSS_RESTRICT').split(','):
+        crs[cr.split(':')[0]] = cr.split(':')[1]
+    
+    if(len(plane['dct']) != 0 and len(plane['proc']) != 0):
         click_button('Add Command')
         driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
         + str(get_command_current_id(pos)) + ']') \
-        .send_keys('PUSH ' + plane['push-taxiway'])
-    
-    if(len(plane['taxi-route']) != 0):
+        .send_keys('DCT ' + plane['dct'])
+        
         click_button('Add Command')
         driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
         + str(get_command_current_id(pos)) + ']') \
-        .send_keys('TAXI ' + plane['taxi-route'])
+        .send_keys('CFIX ' + plane['dct'] + ' ' \
+            + crs[plane['dct']] + ' 210')
+        
+        click_button('Add Command')
+        driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
+        + str(get_command_current_id(pos)) + ']') \
+        .send_keys('CAPP ' + plane['proc'])
+    
     click_button('Done')
     
 click_button('Save')
