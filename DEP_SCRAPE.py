@@ -122,7 +122,7 @@ def get_plane_info(source):
     
     if init_spawn_delay == 0: init_spawn_delay = delay
 
-    return ','.join([ident, acft, dep, arr, , speed,
+    return ','.join([ident, acft, dep, arr, alt, speed,
                      route, 'I', 'L', str(spawn_delay), gate, '', ''])
 
 for filtered_url in filtered_urls:
