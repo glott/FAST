@@ -2,11 +2,11 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.1.6** - 04/05/2023
+**Version 0.1.7** - 04/05/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*. 
 
-__[Download v0.1.6](https://github.com/glott/FAST/releases/download/v0.1.6/FAST.zip)__ 
+__[Download v0.1.7](https://github.com/glott/FAST/releases/download/v0.1.7/FAST.zip)__ 
 
 ---
 ### Installation
@@ -84,7 +84,7 @@ __[Download v0.1.6](https://github.com/glott/FAST/releases/download/v0.1.6/FAST.
 
 `VFR_TYPES`: a list of possible VFR departure aircraft types separated by commas (`,`) with each aircraft type including a weighting following the type code and a colon (`:`)
 
-- `VFR_TYPES=C172:500,C182:300,P28A:200`: in this example, a `C172` (`500/1000`) is 1.67 times as likely to be generated than a `C182` (`300/1000`) and 2.5 times as likely than a `P28A` (`200/1000`)
+- `VFR_TYPES=C172:500,C182:300,P28A:200`: in this example, a `C172` (`500/1000`) is 1.67 times as likely to be generated as a `C182` (`300/1000`) and 2.5 times as likely as a `P28A` (`200/1000`)
 
 - `VFR_TYPES=C172:1,C182:1,P28A:1`: in this example, all aircraft are equally likely (`1/3`) of being generated
 

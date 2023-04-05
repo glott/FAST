@@ -41,12 +41,23 @@ def between(text, start, end):
     
 def click_button(text):
     try: 
-        driver.find_element('xpath', 
-            '//button[contains(text(), \'' + text + '\')]').click()
+        button = driver.find_element('xpath', 
+           '//button[contains(text(), \'' + text + '\')]')
+        driver.execute_script('arguments[0].scrollIntoView(true);', button)
+        driver.execute_script('window.scrollBy(0, -' + 
+                      str(round(button.size['height'] * 2)) + ');')
+        button.click()
     except Exception:
         print('Unable to click button \'' + text + '\'.')
-    
+
 sleep_factor = float(read_config_value('SLOW_INTERNET_FACTOR'))
+def wait(w=1, t=5):
+    try:
+        webdriver.support.ui.WebDriverWait(driver, t).until(webdriver \
+        .support.expected_conditions.url_changes(driver.current_url))
+    except Exception:
+        pass
+    time.sleep(w * sleep_factor)
 
 # OPEN BROWSER
 print('-------------------- FAST --------------------')
@@ -79,7 +90,7 @@ driver.find_element('name', 'flightaware_password') \
 driver.find_element('id', 'loginButton').click()
 print('Successfully logged in to FlightAware.')
 
-time.sleep(sleep_factor * 5)
+wait()
 
 plane_urls = driver.find_elements('xpath', '//a[@href]')
 filtered_urls = list()
@@ -97,7 +108,7 @@ router = [i.split(':') for i in router_long]
 routes = [i[0] for i in router]
 
 def find_intercept(tracklog_url):
-    time.sleep(sleep_factor * random.uniform(1, 5))
+    wait(w=random.uniform(1, 2.5))
     driver.get(tracklog_url)
     
     altitude_json = between(driver.page_source, 'altitude_json = ', ';')
@@ -181,20 +192,21 @@ for filtered_url in filtered_urls:
     print('Scraped ' + plane.split(',')[0] + '\t' \
         + plane.split(',')[2] + '-' + plane.split(',')[3] + ', ' \
         + plane.split(',')[1] + ', ' + plane.split(',')[4])
-    time.sleep(sleep_factor * random.uniform(1, 5))
+    wait(w=random.uniform(1, 2.5))
     
-s_split = s.split('\n')
-s_out = s_split[0]
+s_sorted = sorted([i.split(',') for i in s.split('\n')[1:]], \
+    key=lambda x: x[9])
+s_out = s.split('\n')[0]
 init_spawn_delay = 0
-for i in range(len(s_split) - 1, 0, -1):
-    plane = s_split[i].split(',')
-    if plane[11] == '0':
+for plane in s_sorted:
+    if plane[11] == 0:
         continue
     delay = int(plane[9])
     plane[9] = 0 if init_spawn_delay == 0 else delay - init_spawn_delay
-    if init_spawn_delay == 0: init_spawn_delay = delay
+    if init_spawn_delay == 0: 
+        init_spawn_delay = delay
     s_out += '\n' + ','.join(str(x) for x in plane)
-
+    
 out_file = s_out.split('\n')[1].split(',')[3][1:] + '_ARR_APP_' \
     + time.strftime('%y%m%d-%H%M', time.gmtime()) + '.csv'
 print('Writing aircraft data to ' + str(out_file) + '.')

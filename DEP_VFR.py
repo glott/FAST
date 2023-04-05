@@ -41,12 +41,23 @@ def between(text, start, end):
     
 def click_button(text):
     try: 
-        driver.find_element('xpath', 
-            '//button[contains(text(), \'' + text + '\')]').click()
+        button = driver.find_element('xpath', 
+           '//button[contains(text(), \'' + text + '\')]')
+        driver.execute_script('arguments[0].scrollIntoView(true);', button)
+        driver.execute_script('window.scrollBy(0, -' + 
+                      str(round(button.size['height'] * 2)) + ');')
+        button.click()
     except Exception:
         print('Unable to click button \'' + text + '\'.')
-    
+
 sleep_factor = float(read_config_value('SLOW_INTERNET_FACTOR'))
+def wait(w=1, t=5):
+    try:
+        webdriver.support.ui.WebDriverWait(driver, t).until(webdriver \
+        .support.expected_conditions.url_changes(driver.current_url))
+    except Exception:
+        pass
+    time.sleep(w * sleep_factor)
 
 # READ CONFIG FILE AND GENERATE RANDOM VALUES
 print('-------------------- FAST --------------------')

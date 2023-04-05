@@ -41,12 +41,23 @@ def between(text, start, end):
     
 def click_button(text):
     try: 
-        driver.find_element('xpath', 
-            '//button[contains(text(), \'' + text + '\')]').click()
+        button = driver.find_element('xpath', 
+           '//button[contains(text(), \'' + text + '\')]')
+        driver.execute_script('arguments[0].scrollIntoView(true);', button)
+        driver.execute_script('window.scrollBy(0, -' + 
+                      str(round(button.size['height'] * 2)) + ');')
+        button.click()
     except Exception:
         print('Unable to click button \'' + text + '\'.')
-    
+
 sleep_factor = float(read_config_value('SLOW_INTERNET_FACTOR'))
+def wait(w=1, t=5):
+    try:
+        webdriver.support.ui.WebDriverWait(driver, t).until(webdriver \
+        .support.expected_conditions.url_changes(driver.current_url))
+    except Exception:
+        pass
+    time.sleep(w * sleep_factor)
 
 # OPEN BROWSER
 print('-------------------- FAST --------------------')
@@ -79,7 +90,7 @@ driver.find_element('name', 'flightaware_password') \
 driver.find_element('id', 'loginButton').click()
 print('Successfully logged in to FlightAware.')
 
-time.sleep(sleep_factor * 5)
+wait()
 
 plane_urls = driver.find_elements('xpath', '//a[@href]')
 filtered_urls = list()
@@ -132,7 +143,7 @@ for filtered_url in filtered_urls:
     print('Scraped ' + plane.split(',')[0] + '\t' \
         + plane.split(',')[2] + '-' + plane.split(',')[3] + ', ' \
         + plane.split(',')[1] + ', ' + plane.split(',')[4])
-    time.sleep(sleep_factor * random.uniform(1, 5))
+    wait(w=random.uniform(1, 2.5))
 
 out_file = s.split('\n')[1].split(',')[2][1:] + '_DEP_IFR_' \
     + time.strftime('%y%m%d-%H%M', time.gmtime()) + '.csv'

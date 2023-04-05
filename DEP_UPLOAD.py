@@ -41,12 +41,23 @@ def between(text, start, end):
     
 def click_button(text):
     try: 
-        driver.find_element('xpath', 
-            '//button[contains(text(), \'' + text + '\')]').click()
+        button = driver.find_element('xpath', 
+           '//button[contains(text(), \'' + text + '\')]')
+        driver.execute_script('arguments[0].scrollIntoView(true);', button)
+        driver.execute_script('window.scrollBy(0, -' + 
+                      str(round(button.size['height'] * 2)) + ');')
+        button.click()
     except Exception:
         print('Unable to click button \'' + text + '\'.')
-    
+
 sleep_factor = float(read_config_value('SLOW_INTERNET_FACTOR'))
+def wait(w=1, t=5):
+    try:
+        webdriver.support.ui.WebDriverWait(driver, t).until(webdriver \
+        .support.expected_conditions.url_changes(driver.current_url))
+    except Exception:
+        pass
+    time.sleep(w * sleep_factor)
 
 # OPEN BROWSER
 print('-------------------- FAST --------------------')
@@ -69,8 +80,8 @@ driver.minimize_window()
 print('Opening vNAS login page.')
 driver.get('https://data-admin.virtualnas.net/login')
 
-driver.find_element('class name', 'btn-success').click()
-time.sleep(sleep_factor * 5)
+click_button('Login with VATSIM')
+wait()
 
 try:
     print('Logging in to VATSIM.')
@@ -83,23 +94,27 @@ try:
 except Exception:
     print('Unsuccessfully logged in to VATSIM.')
 
-time.sleep(sleep_factor * 2.5)
+wait(w=2.5)
 
 try:
     ARTCC = read_config_value('ARTCC')
     print('Selecting ' + ARTCC + ' ARTCC.')
-    menu = driver.find_element('class name', 'artcc-menu')
-    nav_link = menu.find_element('class name', 'nav-link').click()
-    dropdown = menu.find_element('class name', 'dropdown-menu')
-    nav_class = str(dropdown.get_attribute('innerHTML')).split(ARTCC)[0] \
-        .split('class=\"')[-1].split(' ')[0]
-    elems = dropdown.find_elements('class name', nav_class)
-    for elem in elems: 
-        if ARTCC in elem.text: elem.click()
+    
+    driver.find_element('xpath', \
+        '//div[@class=\'nav-item dropdown artcc-menu\']') \
+        .find_element('class name', 'nav-link').click()
+    dropdown = driver.find_element('xpath', \
+        '//div[@class=\'dropdown-menu dropdown-menu-right ' \
+        + 'dropdown-menu-md show\']')
+    for div in dropdown.find_element('xpath', './child::*') \
+        .find_elements('xpath', './child::*'):
+            if ARTCC in div.text:
+                div.click()
+    print('Successfully selected ' + ARTCC + ' ARTCC.')
 except Exception:
     pass
 
-time.sleep(sleep_factor * 2.5)
+wait()
 
 # UPLOAD DATA TO vNAS
 def get_plane_id():
@@ -125,16 +140,17 @@ print('Opening scenario ' + read_config_value('SCENARIO') + '.')
 driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
            + read_config_value('SCENARIO'))
 
+wait()
+
 file_in = read_config_value('CSV_FILE')
 if '.' not in file_in: file_in += '.csv'
 f = open(working_directory + '\\' + file_in, 'r')
 reader = csv.DictReader(f, delimiter=',')
-time.sleep(sleep_factor * 2.5)
-driver.execute_script("window.scrollTo(0, 250);")
-time.sleep(sleep_factor * 1)
+wait()
 
 for plane in reader:
     click_button('Add Aircraft')
+    wait(w=0)
     print('Uploading data for ' + plane['ident'] + '.')
     
     pos = get_plane_id()
