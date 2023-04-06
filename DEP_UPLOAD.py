@@ -131,6 +131,13 @@ def set_data(pos, element, value):
         + element).clear()
     driver.find_element('name', 'aircraft[' + pos + '].' 
         + element).send_keys(value)
+
+def set_data_num(pos, element, value):
+    elem = driver.find_element('name', 'aircraft[' + pos + '].' 
+        + element)
+    driver.execute_script('arguments[0].value=\'' + \
+        str(value) + '\';', elem)
+    elem.send_keys('0')
     
 def set_data_drop(pos, header, value):
     Select(driver.find_element('xpath', '//option[text()=\'' \

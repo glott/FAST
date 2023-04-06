@@ -131,6 +131,13 @@ def set_data(pos, element, value):
         + element).clear()
     driver.find_element('name', 'aircraft[' + pos + '].' 
         + element).send_keys(value)
+
+def set_data_num(pos, element, value):
+    elem = driver.find_element('name', 'aircraft[' + pos + '].' 
+        + element)
+    driver.execute_script('arguments[0].value=\'' + \
+        str(value) + '\';', elem)
+    elem.send_keys('0')
     
 def set_data_drop(pos, header, value):
     Select(driver.find_element('xpath', '//option[text()=\'' \
@@ -150,6 +157,9 @@ reader = csv.DictReader(f, delimiter=',')
 wait()
 
 for plane in reader:
+    if(len(plane['dct']) == 0 or len(plane['proc']) == 0):
+        print('Ignoring ' + plane['ident'] + ', invalid procedure.')
+        continue
     click_button('Add Aircraft')
     wait(w=0)
     print('Uploading data for ' + plane['ident'] + '.')
@@ -182,8 +192,8 @@ for plane in reader:
     set_data(pos, 'flightplan.remarks', '/v/ Gate ' + plane['gate'])
     
     set_data_drop(pos, 'Coordinates', 'Coordinates')
-    set_data(pos, 'startingConditions.coordinates.lat', plane['lat'])
-    set_data(pos, 'startingConditions.coordinates.lon', plane['lon'])
+    set_data_num(pos, 'startingConditions.coordinates.lat', plane['lat'])
+    set_data_num(pos, 'startingConditions.coordinates.lon', plane['lon'])
     set_data(pos, 'startingConditions.altitude', plane['ralt'])
     set_data(pos, 'startingConditions.speed', plane['rspeed'])
     set_data(pos, 'startingConditions.heading', plane['hdg'])
