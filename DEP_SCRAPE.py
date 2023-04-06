@@ -111,8 +111,7 @@ for i in range(0, -(-(num_acft + 10) // 40)):
         href = plane_url.get_attribute('href')
         if 'live/flight/id/' in href:
             filtered_urls.append(href)
-            if len(filtered_urls) >= num_acft:
-                break
+
 print('Captured URLs for ' + str(num_acft) + '.')
 
 # CREATE AIRCRAFT DATA FILE
