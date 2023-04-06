@@ -92,12 +92,22 @@ print('Successfully logged in to FlightAware.')
 
 wait()
 
-plane_urls = driver.find_elements('xpath', '//a[@href]')
+num_acft = int(read_config_value('NUM_ARR'))
 filtered_urls = list()
-for plane_url in plane_urls:
-    href = plane_url.get_attribute('href')
-    if 'live/flight/id/' in href:
-        filtered_urls.append(href)
+
+for i in range(0, -(-(num_acft + 10) // 40)):
+    if i != 0:
+        driver.get(url + '?;offset=' + str(i * 40))
+        wait()
+    
+    plane_urls = driver.find_elements('xpath', '//a[@href]')
+    for plane_url in plane_urls:
+        href = plane_url.get_attribute('href')
+        if 'live/flight/id/' in href:
+            filtered_urls.append(href)
+            if len(filtered_urls) >= num_acft:
+                break
+print('Captured URLs for ' + str(num_acft) + '.')
 
 # SCRAPING METHODS
 s = 'ident,type,dep,arr,alt,speed,route,rules,equip,spawn-delay,' \
@@ -185,13 +195,19 @@ def get_plane_info(source):
 # SCRAPE AND CREATE AIRCRAFT DATA FILE
 print('Scraping arrival data at ' + read_config_value('AIRPORT') + '.')
 
+num_planes = 0
 for filtered_url in filtered_urls:
+    if num_planes >= num_acft:
+        break
+    
     driver.get(filtered_url)
     plane = get_plane_info(driver.page_source)
+    
     s += '\n' + plane
     print('Scraped ' + plane.split(',')[0] + '\t' \
         + plane.split(',')[2] + '-' + plane.split(',')[3] + ', ' \
         + plane.split(',')[1] + ', ' + plane.split(',')[4])
+    num_planes += 1
     wait(w=random.uniform(1, 2.5))
     
 s_sorted = sorted([i.split(',') for i in s.split('\n')[1:]], \

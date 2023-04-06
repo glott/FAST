@@ -92,12 +92,22 @@ print('Successfully logged in to FlightAware.')
 
 wait()
 
-plane_urls = driver.find_elements('xpath', '//a[@href]')
+num_acft = int(read_config_value('NUM_DEP'))
 filtered_urls = list()
-for plane_url in plane_urls:
-    href = plane_url.get_attribute('href')
-    if 'live/flight/id/' in href:
-        filtered_urls.append(href)
+
+for i in range(0, -(-(num_acft + 10) // 40)):
+    if i != 0:
+        driver.get(url + '?;offset=' + str(i * 40))
+        wait()
+    
+    plane_urls = driver.find_elements('xpath', '//a[@href]')
+    for plane_url in plane_urls:
+        href = plane_url.get_attribute('href')
+        if 'live/flight/id/' in href:
+            filtered_urls.append(href)
+            if len(filtered_urls) >= num_acft:
+                break
+print('Captured URLs for ' + str(num_acft) + '.')
 
 # CREATE AIRCRAFT DATA FILE
 s = 'ident,type,dep,arr,alt,speed,route,rules,equip,spawn-delay,' \
@@ -117,6 +127,8 @@ def get_plane_info(source):
     speed = between(flight_plan, r'"speed":', r',')
     route = between(flight_plan, r'"route":"', r'",').replace(',', '')
     delay = int(between(flight_plan, r'departure":', r',"ete"'))
+    if delay < round(time.time() - 30 * 60):
+        return ident + ',-1'
     spawn_delay = 0 if init_spawn_delay == 0 else delay - init_spawn_delay
     dep = between(source, r'name="origin" content="', r'"')
     arr = between(source, r'name="destination" content="', r'"')
@@ -136,13 +148,24 @@ def get_plane_info(source):
     return ','.join([ident, acft, dep, arr, alt, speed,
                      route, 'I', 'L', str(spawn_delay), gate, '', ''])
 
+num_planes = 0
 for filtered_url in filtered_urls:
+    if num_planes >= num_acft:
+        break
+    
     driver.get(filtered_url)
     plane = get_plane_info(driver.page_source)
+    
+    if len(plane.split(',')) == 2:
+        print('Skipping ' + plane.split(',')[0] + '.')
+        wait(w=random.uniform(1, 2.5))
+        continue
+        
     s += '\n' + plane
     print('Scraped ' + plane.split(',')[0] + '\t' \
         + plane.split(',')[2] + '-' + plane.split(',')[3] + ', ' \
         + plane.split(',')[1] + ', ' + plane.split(',')[4])
+    num_planes += 1
     wait(w=random.uniform(1, 2.5))
 
 out_file = s.split('\n')[1].split(',')[2][1:] + '_DEP_IFR_' \
