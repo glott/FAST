@@ -4,28 +4,28 @@ _by [Josh Glottmann](https://github.com/glott)_
 
 **Version 0.2.1** - 04/06/2023
 
-Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*. 
+Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*.
 
 __[Download v0.2.1](https://github.com/glott/FAST/releases/download/v0.2.1/FAST.zip)__ 
 
 ---
 ### Installation
 
-1) Download and unzip the `FAST.zip` package from the link above or on this repository's [releases](https://github.com/glott/FAST/releases/latest) page. 
+1) Download and unzip the `FAST.zip` package from the link above or on this repository's [releases](https://github.com/glott/FAST/releases/latest) page.
 2) Move the `FAST` folder to a directory of your choosing. The `FAST.txt` configuration file must be saved in the `FAST` folder or in your `Downloads` folder.  
-3) Download and install the latest version of [Python](https://www.python.org/downloads/). 
+3) Download and install the latest version of [Python](https://www.python.org/downloads/).
 4) Download and install the latest version of [Firefox](https://www.mozilla.org/en-US/firefox/new/) or [Chrome](https://www.google.com/chrome/).
 
 ---
 ### File Descriptions/Usage
 
-**DEP_SCRAPE.py**: Generates a CSV file containing aircraft data for the next 40 departures from a specified airport. 
+**DEP_SCRAPE.py**: Generates a CSV file containing aircraft data for the next 40 departures from a specified airport.
 
-**DEP_VFR.py**: Generates a CSV file containing aircraft data for a specified number of VFR departures. 
+**DEP_VFR.py**: Generates a CSV file containing aircraft data for a specified number of VFR departures.
 
 **DEP_UPLOAD.py**: Uploads departure CSV files to [vNAS Data Admin](https://data-admin.virtualnas.net/).
 
-**ARR_SCRAPE.py**: Generates a CSV file containing aircraft data for the previous 40 arrivals from a specified airport. The arrival data is specifically targeted for nearby inbound arrivals joining a final approach course. 
+**ARR_SCRAPE.py**: Generates a CSV file containing aircraft data for the previous 40 arrivals from a specified airport. The arrival data is specifically targeted for nearby inbound arrivals joining a final approach course.
 
 **FAST.txt**: Configuration file for all `FAST` settings. See below for more specific information.
 
@@ -34,19 +34,21 @@ __[Download v0.2.1](https://github.com/glott/FAST/releases/download/v0.2.1/FAST.
 
 #### General Information
 
-- The `FAST.txt` configuration file must be saved in the `FAST` folder or in your `Downloads` folder. 
+- The `FAST.txt` configuration file must be saved in the `FAST` folder or in your `Downloads` folder.
 
 - Each configuration line is composed of a key and value, separated by an equals sign (`=`). e.g. `AIRPORT=KSFO`, `AIRPORT` is the key and `KSFO` is the value.  
 
 - Do not modify the name of any key (the part before the equals sign (`=`).
 
-- Any text after the equals sign (`=`) is included in your configuration setting. 
+- Any text after the equals sign (`=`) is included in your configuration setting.
 
 #### Global Configuration Settings
 
 `AIRPORT`: the specified airport for the scenario being generated
 
 - `AIRPORT=KSFO`: `KSFO` is the specified airport
+
+`ARTCC`: ARTCC that the scenario is being generated for in the vNAS Data Admin
 
 `BROWSER`: the specified browser to utilize
 
@@ -56,7 +58,7 @@ __[Download v0.2.1](https://github.com/glott/FAST/releases/download/v0.2.1/FAST.
 
 - `SLOW_INTERNET_FACTOR=1`: loads pages at the normal speed
 
-- `SLOW_INTERNET_FACTOR=2`: pages load `2` times slower than normal.
+- `SLOW_INTERNET_FACTOR=2`: pages load `2` times slower than normal
 
 #### `DEP SCRAPE` Configuration Settings
 
@@ -96,27 +98,27 @@ __[Download v0.2.1](https://github.com/glott/FAST/releases/download/v0.2.1/FAST.
 
 `VATSIM_PASS`: VATSIM password
 
-`ARTCC`: ARTCC that the scenario is being generated for in the vNAS Data Admin
-
-`SCENARIO`: the scenario ID that has already been created in the vNAS Data Admin
+`DEP_SCENARIO`: the scenario ID that has already been created in the vNAS Data Admin
 
 - The scenario ID can be found after `/training/scenarios/` in the vNAS Data Admin URL
 
-- `SCENARIO=01GX6E5E0HQKHRR3EA0V42VWPH`: the following URL would result in this configuration value, `https://data-admin.virtualnas.net/training/scenarios/01GX6E5E0HQKHRR3EA0V42VWPH`
+- `DEP_SCENARIO=01GX6E5E0HQKHRR3EA0V42VWPH`: the following URL would result in this configuration value, `https://data-admin.virtualnas.net/training/scenarios/01GX6E5E0HQKHRR3EA0V42VWPH`
 
-`CSV_FILE`: the CSV file utilized for data upload, located either in your `Downloads` folder or the `FAST` folder, the `.csv` extension does not need to be included
+`DEP_CSV_FILE`: the CSV file utilized for data upload, located either in your `Downloads` folder or the `FAST` folder, the `.csv` extension does not need to be included
 
-- `CSV_FILE=SFO_DEP_IFR_230403-1530`: the CSV file being utilized would be `SFO_DEP_IFR_230403-1530.csv`
+- `DEP_CSV_FILE=SFO_DEP_IFR_230403-1530`: the CSV file being utilized would be `SFO_DEP_IFR_230403-1530.csv`
 
-`TIME_COMPRESSION`: this causes all spawn delays to be divided by the specified value
+`DEP_TIME_COMPRESSION`: this causes all spawn delays to be divided by the specified value
 
-- `TIME_COMPRESSION=4`: if a spawn delay was originally `400` seconds, it would be reduced to `100` seconds
+- `DEP_TIME_COMPRESSION=4`: if a spawn delay was originally `400` seconds, it would be reduced to `100` seconds
 
 - This is useful for spawning in more departures than an airport may typically see in a certain period of time for training purposes
 
-`TIME_OFFSET`: all spawn delays are offset (sooner) by this amount of time in seconds; all spawn delays less than the offset spawn immediately; the offset is applied after any `TIME_COMPRESSION` above 
+`DEP_TIME_OFFSET`: all spawn delays are offset (sooner) by this amount of time in seconds; all spawn delays less than the offset spawn immediately; the offset is applied after any `DEP_TIME_COMPRESSION` above 
 
-- `TIME_OFFSET=600`: all aircraft spawn `600` seconds sooner (after `TIME_COMPRESSION` is applied); an aircraft with a spawn delay of `300` seconds would spawn immediately; an aircraft with a spawn delay of `1250` seconds would spawn after `650` seconds
+- `DEP_TIME_OFFSET=600`: all aircraft spawn `600` seconds sooner (after `DEP_TIME_COMPRESSION` is applied); an aircraft with a spawn delay of `300` seconds would spawn immediately; an aircraft with a spawn delay of `1250` seconds would spawn after `650` seconds
+
+- This is useful for spawning in aircraft immediately into a file
 
 #### `ARR SCRAPE` Configuration Settings
 
@@ -126,7 +128,29 @@ __[Download v0.2.1](https://github.com/glott/FAST/releases/download/v0.2.1/FAST.
 
 - `INTERCEPT_ALT=4000`: the inbound aircraft's position, time, and altitude at the last data point before reaching (or going below) `4000` feet will be recorded
 
-`ROUTER`: information TBD
+`ROUTER`: a list of routing information for aircraft to join a final approach course
+
+- Individual routing format: `ARRIVAL:DIRECT TO:PROCEDURE`
+
+- `ROUTER=SERFR:HEMAN:28L,DYAMD:CEPIN:28R`: all aircraft with `SERFR` in their flightplan will fly directly to `HEMAN` and join the approach to runway `28L`; all aircraft with `DYAMD` in their flightplan will fly directly to `CEPIN` and join the approach to runway `28R`
+
+#### `ARR UPLOAD` Configuration Settings
+
+`ARR_SCENARIO`: see `DEP_SCENARIO` above for usage
+
+`ARR_CSV_FILE`: see `DEP_CSV_FILE` above for usage
+
+`ARR_TIME_COMPRESSION`: see `DEP_TIME_COMPRESSION` above for usage
+
+- For busy airports, `ARR_TIME_COMPRESSION` should likely be set to `1`
+
+`ARR_TIME_OFFSET`: see `DEP_TIME_OFFSET` above for usage
+
+- `ARR_TIME_OFFSET=0` is the recommended value for most situations
+
+`CROSS_RESTRICT`: a list of crossing restrictions for inbound aircraft
+
+- `CROSS_RESTRICT=HEMAN:3100,CEPIN:3000`: aircraft will be directed to `HEMAN` at `3100` or `CEPIN` at `3000` if either is in their flightplan
 
 ---
 *\* Josh Glottmann is not responsible for any misuse of this software.*
