@@ -167,9 +167,12 @@ existing_planes = list()
 for plane in current_planes:
     existing_planes.append(plane.get_attribute('value'))
 
+max_delay = int(read_config_value('MAX_DELAY'))
+prev_spawn_delay = 0
+
 for plane in reader:
     if(len(plane['dct']) == 0 or len(plane['proc']) == 0):
-        print('Ignoring ' + plane['ident'] + ', invalid procedure.')
+        print('Skipping ' + plane['ident'] + ', invalid procedure.')
         continue
     delete_existing(plane['ident'])
     click_button('Add Aircraft')
@@ -183,7 +186,12 @@ for plane in reader:
     true_spawn_delay = round(int(plane['spawn-delay']) \
         / float(read_config_value('ARR_TIME_COMPRESSION')) \
         - int(read_config_value('ARR_TIME_OFFSET')))
-    if true_spawn_delay < 0: true_spawn_delay = 0
+    if true_spawn_delay < 0: 
+        true_spawn_delay = 0
+    if true_spawn_delay - prev_spawn_delay > max_delay:
+        true_spawn_delay = prev_spawn_delay + max_delay \
+            + random.randint(0, 15)
+    prev_spawn_delay = true_spawn_delay
     set_data(pos, 'spawnDelay', true_spawn_delay)
     set_data(pos, 'airportId', plane['arr'][1:])
     set_data(pos, 'expectedApproach', 'I' + plane['proc'])
@@ -216,16 +224,22 @@ for plane in reader:
         crs[cr.split(':')[0]] = cr.split(':')[1]
     
     if(len(plane['dct']) != 0 and len(plane['proc']) != 0):
-        click_button('Add Command')
-        driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
-        + str(get_command_current_id(pos)) + ']') \
-        .send_keys('CFIX ' + plane['dct'] + ' ' \
-            + crs[plane['dct']] + ' 210')
+        has_valid_crossing = False
+        try:
+            click_button('Add Command')
+            driver.find_element('name', 'aircraft[' + pos \
+                + '].presetCommands[' + str(get_command_current_id(pos)) \
+                + ']').send_keys('CFIX ' + plane['dct'] + ' ' \
+                + crs[plane['dct']] + ' 210')
+            has_valid_crossing = True
+        except Exception:
+            pass
         
-        click_button('Add Command')
+        if has_valid_crossing:
+            click_button('Add Command')
         driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
-        + str(get_command_current_id(pos)) + ']') \
-        .send_keys('CAPP ' + plane['proc'])
+            + str(get_command_current_id(pos)) + ']') \
+            .send_keys('CAPP ' + plane['proc'])
     
     click_button('Done')
     

@@ -2,11 +2,11 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.2.2** - 04/06/2023
+**Version 0.2.3** - 04/06/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*.
 
-__[Download v0.2.2](https://github.com/glott/FAST/releases/download/v0.2.2/FAST.zip)__ 
+__[Download v0.2.3](https://github.com/glott/FAST/releases/download/v0.2.3/FAST.zip)__ 
 
 ---
 ### Installation
@@ -151,6 +151,10 @@ __[Download v0.2.2](https://github.com/glott/FAST/releases/download/v0.2.2/FAST.
 `ARR_TIME_OFFSET`: see `DEP_TIME_OFFSET` above for usage
 
 - `ARR_TIME_OFFSET=0` is the recommended value for most situations
+
+`MAX_DELAY`: this can be used to reduce the gap between arrivals
+
+- `MAX_DELAY=150`: two aircraft will have at most a `150` second delay between each other
 
 `CROSS_RESTRICT`: a list of crossing restrictions for inbound aircraft
 
