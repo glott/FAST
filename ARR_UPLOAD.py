@@ -207,11 +207,6 @@ for plane in reader:
         click_button('Add Command')
         driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
         + str(get_command_current_id(pos)) + ']') \
-        .send_keys('DCT ' + plane['dct'])
-        
-        click_button('Add Command')
-        driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
-        + str(get_command_current_id(pos)) + ']') \
         .send_keys('CFIX ' + plane['dct'] + ' ' \
             + crs[plane['dct']] + ' 210')
         
