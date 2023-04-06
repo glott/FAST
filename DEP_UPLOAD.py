@@ -117,7 +117,7 @@ except Exception:
 
 wait()
 
-# UPLOAD DATA TO vNAS
+# UPLOAD METHODS
 def get_plane_id():
     return re.findall(r'aircraft\[[0-9]{1,4}\]', driver.page_source)[0] \
         .split('[')[1].split(']')[0]
@@ -127,23 +127,29 @@ def get_command_current_id(pos):
         r'\]\.presetCommands\[[0-9]{1,4}\]', driver.page_source)) - 1
     
 def set_data(pos, element, value):
-    driver.find_element('name', 'aircraft[' + pos + '].' 
-        + element).clear()
-    driver.find_element('name', 'aircraft[' + pos + '].' 
-        + element).send_keys(value)
-
-def set_data_num(pos, element, value):
     elem = driver.find_element('name', 'aircraft[' + pos + '].' 
         + element)
     driver.execute_script('arguments[0].value=\'' + \
         str(value) + '\';', elem)
-    elem.send_keys('0')
+    elem.send_keys('0' + webdriver.common.keys.Keys.BACKSPACE)
     
 def set_data_drop(pos, header, value):
     Select(driver.find_element('xpath', '//option[text()=\'' \
         + header + '\']').find_element('xpath', '..')) \
         .select_by_value(value)
+    
+def delete_existing(ident):
+    if ident in existing_planes:
+        elem = driver.find_element('xpath', '//input[@value=\'' \
+            + ident + '\']')
+        button = elem.find_element('xpath', '../../..') \
+            .find_element('class name', 'btn-danger')
+        driver.execute_script('arguments[0].scrollIntoView(true);', button)
+        driver.execute_script('window.scrollBy(0, -' + 
+            str(round(button.size['height'] * 2)) + ');')
+        button.click()
 
+# UPLOAD DATA TO vNAS
 print('Opening scenario ' + read_config_value('DEP_SCENARIO') + '.')
 driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
            + read_config_value('DEP_SCENARIO'))
@@ -156,7 +162,13 @@ f = open(working_directory + '\\' + file_in, 'r')
 reader = csv.DictReader(f, delimiter=',')
 wait()
 
+current_planes = driver.find_elements('xpath', '//input[@disabled=\'\']')
+existing_planes = list()
+for plane in current_planes:
+    existing_planes.append(plane.get_attribute('value'))
+
 for plane in reader:
+    delete_existing(plane['ident'])
     click_button('Add Aircraft')
     wait(w=0)
     print('Uploading data for ' + plane['ident'] + '.')
@@ -164,7 +176,10 @@ for plane in reader:
     pos = get_plane_id()
     set_data(pos, 'aircraftId', plane['ident'])
     set_data(pos, 'aircraftType', plane['type'])
-    set_data_drop(pos, 'Standby', 'Standby')
+    if len(plane['taxi-route']) > 0:
+        set_data_drop(pos, 'Standby', 'C')
+    else:
+        set_data_drop(pos, 'Standby', 'Standby')
     true_spawn_delay = round(int(plane['spawn-delay']) \
         / float(read_config_value('DEP_TIME_COMPRESSION')) \
         - int(read_config_value('DEP_TIME_OFFSET')))
