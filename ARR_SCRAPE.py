@@ -83,12 +83,15 @@ url = 'https://flightaware.com/live/airport/' \
 
 driver.get(url)
 
-driver.find_element('name', 'flightaware_username') \
-    .send_keys(read_config_value('FLIGHTAWARE_USER'))
-driver.find_element('name', 'flightaware_password') \
-    .send_keys(read_config_value('FLIGHTAWARE_PASS'))
-driver.find_element('id', 'loginButton').click()
-print('Successfully logged in to FlightAware.')
+try:
+    driver.find_element('name', 'flightaware_username') \
+        .send_keys(read_config_value('FLIGHTAWARE_USER'))
+    driver.find_element('name', 'flightaware_password') \
+        .send_keys(read_config_value('FLIGHTAWARE_PASS'))
+    driver.find_element('id', 'loginButton').click()
+    print('Successfully logged in to FlightAware.')
+except Exception:
+    print('Unsuccessfully logged in to FlightAware.')
 
 wait()
 
