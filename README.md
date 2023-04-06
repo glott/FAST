@@ -2,11 +2,11 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.2.1** - 04/06/2023
+**Version 0.2.2** - 04/06/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*.
 
-__[Download v0.2.1](https://github.com/glott/FAST/releases/download/v0.2.1/FAST.zip)__ 
+__[Download v0.2.2](https://github.com/glott/FAST/releases/download/v0.2.2/FAST.zip)__ 
 
 ---
 ### Installation
@@ -66,6 +66,8 @@ __[Download v0.2.1](https://github.com/glott/FAST/releases/download/v0.2.1/FAST.
 
 `FLIGHTAWARE_PASS`: FlightAware password
 
+`NUM_DEP`: the number of IFR departures generated
+
 #### `DEP VFR` Configuration Settings
 
 `GA_PARKING`: this is a list of pre-defined GA parking spots in your aircraft file, all separated by commas (`,`)
@@ -123,6 +125,8 @@ __[Download v0.2.1](https://github.com/glott/FAST/releases/download/v0.2.1/FAST.
 #### `ARR SCRAPE` Configuration Settings
 
 `FLIGHTAWARE_USER` and `FLIGHTAWARE_PASS` must be completed in the `DEP SCRAPE` section of the configuration file
+
+`NUM_ARR`: the number of IFR arr generated, may ultimately be slightly less than this value
 
 `INTERCEPT_ALT`: this is the lowest altitude that an aircraft will spawn at
 
