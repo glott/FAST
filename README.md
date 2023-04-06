@@ -156,6 +156,8 @@ __[Download v0.2.3](https://github.com/glott/FAST/releases/download/v0.2.3/FAST.
 
 - `MAX_DELAY=150`: two aircraft will have at most a `150` second delay between each other
 
+- This setting should be utilized before modifying `ARR_TIME_COMPRESSION` or `ARR_TIME_OFFSET`
+
 `CROSS_RESTRICT`: a list of crossing restrictions for inbound aircraft
 
 - `CROSS_RESTRICT=HEMAN:3100,CEPIN:3000`: aircraft will be directed to `HEMAN` at `3100` or `CEPIN` at `3000` if either is in their flightplan
