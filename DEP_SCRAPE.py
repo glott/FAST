@@ -89,7 +89,10 @@ try:
     driver.find_element('name', 'flightaware_password') \
         .send_keys(read_config_value('FLIGHTAWARE_PASS'))
     driver.find_element('id', 'loginButton').click()
-    print('Successfully logged in to FlightAware.')
+    if 'account/session' in driver.current_url:
+        print('Unsuccessfully logged in to FlightAware.')
+    else:
+        print('Successfully logged in to FlightAware.')
 except Exception:
     print('Unsuccessfully logged in to FlightAware.')
 
