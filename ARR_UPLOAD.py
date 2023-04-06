@@ -167,6 +167,14 @@ existing_planes = list()
 for plane in current_planes:
     existing_planes.append(plane.get_attribute('value'))
 
+crs = {}
+for cr in read_config_value('CROSS_RESTRICT').split(','):
+    crs[cr.split(':')[0]] = cr.split(':')[1]
+    
+srs = {}
+for sr in read_config_value('SPEED_RESTRICT').split(','):
+    srs[sr.split(':')[0]] = sr.split(':')[1]
+
 max_delay = int(read_config_value('MAX_DELAY'))
 prev_spawn_delay = 0
 
@@ -219,27 +227,25 @@ for plane in reader:
     set_data(pos, 'startingConditions.heading', plane['hdg'])
     set_data(pos, 'startingConditions.navigationPath', plane['dct'])
     
-    crs = {}
-    for cr in read_config_value('CROSS_RESTRICT').split(','):
-        crs[cr.split(':')[0]] = cr.split(':')[1]
-    
     if(len(plane['dct']) != 0 and len(plane['proc']) != 0):
-        has_valid_crossing = False
-        try:
+        if plane['dct'] in crs:
             click_button('Add Command')
             driver.find_element('name', 'aircraft[' + pos \
                 + '].presetCommands[' + str(get_command_current_id(pos)) \
                 + ']').send_keys('CFIX ' + plane['dct'] + ' ' \
                 + crs[plane['dct']] + ' 210')
-            has_valid_crossing = True
-        except Exception:
-            pass
         
-        if has_valid_crossing:
-            click_button('Add Command')
+        click_button('Add Command')
         driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
             + str(get_command_current_id(pos)) + ']') \
             .send_keys('CAPP ' + plane['proc'])
+        
+        if plane['dct'] in srs:
+            click_button('Add Command')
+            driver.find_element('name', 'aircraft[' + pos \
+                + '].presetCommands[' + str(get_command_current_id(pos)) \
+                + ']').send_keys('AT ' + plane['dct'] + ' SPD ' \
+                + srs[plane['dct']])
     
     click_button('Done')
     

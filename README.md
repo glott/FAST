@@ -2,11 +2,11 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.2.3** - 04/06/2023
+**Version 0.2.4** - 04/06/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*.
 
-__[Download v0.2.3](https://github.com/glott/FAST/releases/download/v0.2.3/FAST.zip)__ 
+__[Download v0.2.4](https://github.com/glott/FAST/releases/download/v0.2.4/FAST.zip)__ 
 
 ---
 ### Installation
@@ -160,7 +160,11 @@ __[Download v0.2.3](https://github.com/glott/FAST/releases/download/v0.2.3/FAST.
 
 `CROSS_RESTRICT`: a list of crossing restrictions for inbound aircraft
 
-- `CROSS_RESTRICT=HEMAN:3100,CEPIN:3000`: aircraft will be directed to `HEMAN` at `3100` or `CEPIN` at `3000` if either is in their flightplan
+- `CROSS_RESTRICT=HEMAN:3100,CEPIN:3000`: aircraft routed via `HEMAN` will cross it at `3100` feet and `210` knots
+
+`SPEED_RESTRICT`: a list of speed restrictions for inbound aircraft
+
+- `SPEED_RESTRICT=HEMAN:180 DUYET,CEPIN:180 AXMUL`: aircraft routed via `HEMAN` will maintain `180` knots until `DUYET` (after passing `HEMAN`)
 
 ---
 *\* Josh Glottmann is not responsible for any misuse of this software.*
