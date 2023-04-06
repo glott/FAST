@@ -101,7 +101,7 @@ wait()
 num_acft = int(read_config_value('NUM_DEP'))
 filtered_urls = list()
 
-for i in range(0, -(-(num_acft + 10) // 40)):
+for i in range(0, -(-(num_acft + 15) // 40)):
     if i != 0:
         driver.get(url + '?;offset=' + str(i * 40))
         wait()
