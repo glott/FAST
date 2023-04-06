@@ -66,7 +66,7 @@ __[Download v0.2.2](https://github.com/glott/FAST/releases/download/v0.2.2/FAST.
 
 `FLIGHTAWARE_PASS`: FlightAware password
 
-`NUM_DEP`: the number of IFR departures generated
+`NUM_DEP`: the number of IFR departures generated, may ultimately be slightly less than this value
 
 #### `DEP VFR` Configuration Settings
 
