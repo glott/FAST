@@ -123,6 +123,6 @@ except Exception:
     
 print('\nAll FAST files updated successfully!')
 if len(sys.argv) == 1:
-    input('Press enter to close');
+    input('Press enter to close.');
 else:
     sys.stdout = sys.__stdout__
