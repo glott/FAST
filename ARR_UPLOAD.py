@@ -193,7 +193,7 @@ try:
     wait()
 except Exception:
     print('Unable to read ' + read_config_value('ARR_CSV_FILE') \
-        + ' from \'scenarios\' subdirectory.')
+        + ' from \'scenarios\' subdirectory.\n')
     pass
 
 current_planes = driver.find_elements('xpath', '//input[@disabled=\'\']')
