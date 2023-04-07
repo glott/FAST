@@ -1,8 +1,7 @@
 ########## FAST CONFIGURATION FILE ##########
-# Any characters after the '=' are utilized #
-# Place file in your Downloads/FAST folder  #
 #                                           #
-#   https://github.com/glott/FAST#readme    #
+#    https://github.com/glott/FAST#readme   #
+#                                           #
 #############################################
 
 AIRPORT=KSFO

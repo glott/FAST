@@ -1,5 +1,5 @@
 # IMPORTS AND ZIP DOWNLOAD
-import zipfile, os, shutil, urllib.request
+import zipfile, os, shutil, urllib.request, requests
 
 print('-------------------- FAST --------------------')
 print('Downloading the latest version of FAST.')
@@ -94,5 +94,26 @@ except Exception:
     print('Unable to delete temporary update files.')
     pass
 
+# ADD VERSION TO FAST.txt
+response = requests.get('https://api.github.com/repos/glott/FAST/' \
+    + 'releases/latest')
+v = response.json()['tag_name'][1:]
+
+config_file = cwd + '\\FAST.txt'
+
+if os.path.isfile(config_file):
+    with open(config_file, 'r') as file:
+        config = file.read()
+        space = '#                                           #'
+        fill = '#############################################'
+        double = space + '\n' + fill
+        version = '#               Version ' + v + '               #\n'
+        config = config.replace(double, version + double)
+        
+    with open(config_file, 'w') as out_file:
+        out_file.write(config)
+    
+    print('Added version to FAST.txt.')
+    
 print('\nAll FAST files updated successfully!')
 input('Press enter to close.');
