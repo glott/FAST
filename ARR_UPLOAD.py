@@ -185,11 +185,15 @@ driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
 
 wait()
 
-file_in = 'scenarios\\' + read_config_value('ARR_CSV_FILE')
-if '.' not in file_in: file_in += '.csv'
-f = open(working_directory + '\\' + file_in, 'r')
-reader = csv.DictReader(f, delimiter=',')
-wait()
+try: 
+    file_in = '\\scenarios\\' + read_config_value('ARR_CSV_FILE')
+    if '.' not in file_in: file_in += '.csv'
+    f = open(working_directory + file_in, 'r')
+    reader = csv.DictReader(f, delimiter=',')
+    wait()
+except Exception:
+    print('Unable to read CSV file from \'scenarios\' subdirectory.')
+    pass
 
 current_planes = driver.find_elements('xpath', '//input[@disabled=\'\']')
 existing_planes = list()
