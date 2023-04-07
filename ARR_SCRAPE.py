@@ -237,6 +237,9 @@ for filtered_url in filtered_urls:
     driver.get(filtered_url)
     plane = get_plane_info(driver.page_source)
     
+    if float(plane.split(',')[11]) == 0:
+        continue
+    
     s += '\n' + plane
     print('Scraped ' + plane.split(',')[0] + '\t' \
         + plane.split(',')[2] + '-' + plane.split(',')[3] + ', ' \
@@ -249,7 +252,7 @@ s_sorted = sorted([i.split(',') for i in s.split('\n')[1:]], \
 s_out = s.split('\n')[0]
 init_spawn_delay = 0
 for plane in s_sorted:
-    if plane[11] == 0:
+    if float(plane[11]) == 0:
         continue
     delay = int(plane[9])
     plane[9] = 0 if init_spawn_delay == 0 else delay - init_spawn_delay
@@ -264,7 +267,7 @@ print('Writing aircraft data to \'scenarios/' + str(out_file) + '\'.')
 out_file = working_directory + '\\scenarios\\' + out_file
 os.makedirs(os.path.dirname(out_file), exist_ok=True)
 with open(out_file, 'w') as f: 
-    f.write(s)
+    f.write(s_out)
 
 print('Arrival scraping complete!')
 driver.quit()
