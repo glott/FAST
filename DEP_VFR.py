@@ -151,8 +151,11 @@ for i in range(0, num_vfr):
 
 out_file = s.split('\n')[1].split(',')[2][1:] + '_DEP_VFR_' \
     + time.strftime('%y%m%d-%H%M', time.gmtime()) + '.csv'
-print('Writing aircraft data to ' + str(out_file) + '.')
-with open(working_directory + '\\' + out_file, 'w') as f: 
+print('Writing aircraft data to \'scenarios/' + str(out_file) + '\'.')
+
+out_file = working_directory + '\\scenarios\\' + out_file
+os.makedirs(os.path.dirname(out_file), exist_ok=True)
+with open(out_file, 'w') as f: 
     f.write(s)
 
 print('VFR departure generation complete!')

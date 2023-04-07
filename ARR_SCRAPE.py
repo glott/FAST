@@ -259,9 +259,12 @@ for plane in s_sorted:
     
 out_file = s_out.split('\n')[1].split(',')[3][1:] + '_ARR_APP_' \
     + time.strftime('%y%m%d-%H%M', time.gmtime()) + '.csv'
-print('Writing aircraft data to ' + str(out_file) + '.')
-with open(working_directory + '\\' + out_file, 'w') as f: 
-    f.write(s_out)
+print('Writing aircraft data to \'scenarios/' + str(out_file) + '\'.')
+
+out_file = working_directory + '\\scenarios\\' + out_file
+os.makedirs(os.path.dirname(out_file), exist_ok=True)
+with open(out_file, 'w') as f: 
+    f.write(s)
 
 print('Arrival scraping complete!')
 driver.quit()
