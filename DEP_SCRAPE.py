@@ -134,7 +134,7 @@ for i in range(0, -(-(num_acft + 15) // 40)):
         if 'live/flight/id/' in href:
             filtered_urls.append(href)
 
-print('Captured URLs for ' + str(num_acft) + '.')
+print('Captured URLs for ' + str(num_acft) + ' planes.')
 
 # CREATE AIRCRAFT DATA FILE
 s = 'ident,type,dep,arr,alt,speed,route,rules,equip,spawn-delay,' \
