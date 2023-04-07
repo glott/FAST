@@ -44,6 +44,13 @@ def check_for_updates():
                 if config_version not in ver:
                     os.system('python FAST_UPDATE.py 0')
                     print('Updated FAST files to v' + ver + '.')
+                    for i in range(5, 0, -1):
+                        print('Restarting ' + os.path.basename(__file__) \
+                            + ' in ' + str(i) + '.', end='\r')
+                        time.sleep(1)
+                    print(end='\n')
+                    os.system('cls')
+                    os.system('python ' + ' '.join(sys.argv))
     except Exception:
         pass
 
