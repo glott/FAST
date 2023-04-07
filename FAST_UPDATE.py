@@ -1,28 +1,28 @@
 # IMPORTS AND ZIP DOWNLOAD
-import zipfile, os, shutil, urllib.request, requests
+import zipfile, os, shutil, urllib.request, requests, sys
 
 print('-------------------- FAST --------------------')
-print('Downloading the latest version of FAST.')
+print('Downloading the latest version of FAST')
 
 try:
     url = 'https://github.com/glott/FAST/releases/latest/download/FAST.zip'
     urllib.request.urlretrieve(url, 'FAST.zip');
-    print('Downloaded FAST.zip.')
+    print('Downloaded FAST.zip')
 except Exception:
-    print('Unable to download FAST.zip.')
+    print('Unable to download FAST.zip')
 
 # ZIP EXTRACTION AND DELETION
 files = zipfile.ZipFile('FAST.zip', 'r')
 files.extractall('FAST_update')
 files.close()
 
-print('Extracted temporary update files.')
+print('Extracted temporary update files')
 
 try:
     os.remove('FAST.zip')
-    print('Deleted FAST.zip.')
+    print('Deleted FAST.zip')
 except Exception:
-    print('Unable to delete FAST.zip.')
+    print('Unable to delete FAST.zip')
     pass
 
 # FILE MANIPULATION METHODS
@@ -55,9 +55,9 @@ def merge_config(f_old, f_new):
         with open(f_old, 'w') as out_file:
             out_file.write('\n'.join(out_config))
             
-        print('Merged FAST.txt.')
+        print('Merged FAST.txt')
     except Exception:
-        print('Unable to merge FAST.txt.')
+        print('Unable to merge FAST.txt')
         pass
 
 def move_file(f, w='update'):
@@ -70,9 +70,9 @@ def move_file(f, w='update'):
             w = 'create'
         shutil.move(f, out_dir)
         
-        print(w.capitalize() + 'd ' + file_name + '.')
+        print(w.capitalize() + 'd ' + file_name)
     except Exception:
-        print('Unable to ' + w + ' ' + file_name + '.')
+        print('Unable to ' + w + ' ' + file_name)
         pass
 
 # UPDATE FILES AND MERGE CONFIG
@@ -89,31 +89,34 @@ for file in os.listdir(cwd + '\\FAST_update'):
     
 try:
     shutil.rmtree(cwd + '\\FAST_update')
-    print('Deleted temporary update files.')
+    print('Deleted temporary update files')
 except Exception:
-    print('Unable to delete temporary update files.')
+    print('Unable to delete temporary update files')
     pass
 
 # ADD VERSION TO FAST.txt
-response = requests.get('https://api.github.com/repos/glott/FAST/' \
-    + 'releases/latest')
-v = response.json()['tag_name'][1:]
+try: 
+    response = urllib.request.urlopen( \
+        'https://github.com/glott/FAST/releases/latest')
+    v = str(response.read()).split('FAST/tree/')[1].split(r'"')[0][1:]
 
-config_file = cwd + '\\FAST.txt'
+    config_file = cwd + '\\FAST.txt'
 
-if os.path.isfile(config_file):
-    with open(config_file, 'r') as file:
-        config = file.read()
-        space = '#                                           #'
-        fill = '#############################################'
-        double = space + '\n' + fill
-        version = '#               Version ' + v + '               #\n'
-        config = config.replace(double, version + double)
-        
-    with open(config_file, 'w') as out_file:
-        out_file.write(config)
-    
-    print('Added version to FAST.txt.')
+    if os.path.isfile(config_file):
+        with open(config_file, 'r') as file:
+            config = file.read()
+            space = '#                                           #'
+            fill = '#############################################'
+            double = space + '\n' + fill
+            version = '#               Version ' + v + '               #\n'
+            config = config.replace(double, version + double)
+
+        with open(config_file, 'w') as out_file:
+            out_file.write(config)
+
+        print('Added version to FAST.txt')
+except Exception:
+    pass
     
 print('\nAll FAST files updated successfully!')
-input('Press enter to close.');
+input('Press enter to close');
