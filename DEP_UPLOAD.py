@@ -1,5 +1,6 @@
 # IMPORTS AND COMMON FUNCTIONS
-import os, subprocess, sys, time, random, pathlib, csv, re, warnings, random
+import csv, os, pathlib, random, random, re, requests
+import subprocess, sys, time, urllib.request, warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 try:
@@ -26,6 +27,28 @@ else:
     print('FAST.txt file not found!\nPlace valid FAST.txt file in this ' \
           + 'folder or in your Downloads folder.\nDefault file:' \
           + ' https://raw.githubusercontent.com/glott/FAST/main/FAST.txt')
+    
+def check_for_updates():
+    try: 
+        response = urllib.request.urlopen( \
+            'https://github.com/glott/FAST/releases/latest')
+        ver = str(response.read()).split('FAST/tree/')[1].split(r'"')[0][1:]
+        
+        config_file = os.getcwd() + '\\FAST.txt'
+        readme_file = os.getcwd() + '\\README.md'
+        if os.path.isfile(config_file) and not os.path.isfile(readme_file):
+            with open(config_file, 'r') as file:
+                config = file.read()
+            if 'Version ' in config:
+                config_version = config.split('Version ')[1].split(' ')[0]
+                if config_version not in ver:
+                    os.system('python FAST_UPDATE.py')
+                    print('Updated FAST files to v' + ver + '.')
+    except Exception:
+        pass
+
+print('-------------------- FAST --------------------')
+check_for_updates()
 
 def read_config_value(key):
     config = open(working_directory + '\\FAST.txt', 'r').read()
@@ -45,7 +68,7 @@ def click_button(text):
            '//button[contains(text(), \'' + text + '\')]')
         driver.execute_script('arguments[0].scrollIntoView(true);', button)
         driver.execute_script('window.scrollBy(0, -' + 
-                      str(round(button.size['height'] * 2)) + ');')
+            str(round(button.size['height'] * 2)) + ');')
         button.click()
     except Exception:
         print('Unable to click button \'' + text + '\'.')
@@ -60,7 +83,6 @@ def wait(w=1, t=5):
     time.sleep(w * sleep_factor)
 
 # OPEN BROWSER
-print('-------------------- FAST --------------------')
 browser = read_config_value('BROWSER').capitalize()
 print('Opening ' + browser + '.')
 
