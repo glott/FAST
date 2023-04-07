@@ -42,7 +42,7 @@ def check_for_updates():
             if 'Version ' in config:
                 config_version = config.split('Version ')[1].split(' ')[0]
                 if config_version not in ver:
-                    os.system('python FAST_UPDATE.py')
+                    os.system('python FAST_UPDATE.py 0')
                     print('Updated FAST files to v' + ver + '.')
     except Exception:
         pass

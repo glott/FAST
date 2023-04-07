@@ -1,6 +1,9 @@
 # IMPORTS AND ZIP DOWNLOAD
 import zipfile, os, shutil, urllib.request, requests, sys
 
+if len(sys.argv) > 1:
+    sys.stdout = open(os.devnull, 'w')
+
 print('-------------------- FAST --------------------')
 print('Downloading the latest version of FAST')
 
@@ -119,4 +122,7 @@ except Exception:
     pass
     
 print('\nAll FAST files updated successfully!')
-input('Press enter to close');
+if len(sys.argv) == 1:
+    input('Press enter to close');
+else:
+    sys.stdout = sys.__stdout__
