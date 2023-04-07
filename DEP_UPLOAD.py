@@ -192,7 +192,8 @@ try:
     reader = csv.DictReader(f, delimiter=',')
     wait()
 except Exception:
-    print('Unable to read CSV file from \'scenarios\' subdirectory.')
+    print('Unable to read ' + read_config_value('DEP_CSV_FILE') \
+        + ' from \'scenarios\' subdirectory.')
     pass
 
 current_planes = driver.find_elements('xpath', '//input[@disabled=\'\']')
