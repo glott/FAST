@@ -260,7 +260,7 @@ for plane in s_sorted:
         init_spawn_delay = delay
     s_out += '\n' + ','.join(str(x) for x in plane)
     
-out_file = s_out.split('\n')[1].split(',')[3][1:] + '_ARR_APP_' \
+out_file = s_out.split('\n')[1].split(',')[3][1:] + '_ARR_TWR_' \
     + time.strftime('%y%m%d-%H%M', time.gmtime()) + '.csv'
 print('Writing aircraft data to \'scenarios/' + str(out_file) + '\'.')
 
