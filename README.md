@@ -51,6 +51,7 @@ __[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - Any text after the equals sign (`=`) is included in your configuration setting.
 
+---
 #### `GLOBAL` Configuration Settings
 
 `AIRPORT`: the specified airport for the scenario being generated
@@ -69,6 +70,7 @@ __[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - `SLOW_INTERNET_FACTOR=2`: pages load `2` times slower than normal
 
+---
 #### `LOGIN` Configuration Settings
 
 `FLIGHTAWARE_USER`: FlightAware username
@@ -79,6 +81,7 @@ __[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 `VATSIM_PASS`: VATSIM password
 
+---
 #### `DEP SCRAPE` Configuration Settings
 
 `NUM_DEP`: the number of IFR departures generated, may ultimately be slightly less than this value
@@ -87,6 +90,7 @@ __[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - `GATE_REPLACE=A1:A1V,A6:A6S`: planes parking at gate `A1` will be assigned `A1V` in the CSV output file
 
+---
 #### `DEP VFR` Configuration Settings
 
 `NUM_VFR`: the number of VFR aircraft generated, cannot be greater than the number of available GA parking spots
@@ -113,6 +117,7 @@ __[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - The default values included in the default configuration file approximately represents common piston aircraft in the U.S.
 
+---
 #### `DEP UPLOAD` Configuration Settings
 
 `DEP_SCENARIO`: the scenario ID that has already been created in the vNAS Data Admin
@@ -137,6 +142,7 @@ __[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - This is useful for spawning in aircraft immediately into a file
 
+---
 #### `APP SCRAPE` Configuration Settings
 
 `NUM_APP`: the number of IFR arrivals generated which spawn on final approach, may ultimately be slightly less than this value
@@ -151,6 +157,7 @@ __[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - `ROUTER=SERFR:HEMAN:28L,DYAMD:CEPIN:28R`: all aircraft with `SERFR` in their flightplan will fly directly to `HEMAN` and join the approach to runway `28L`; all aircraft with `DYAMD` in their flightplan will fly directly to `CEPIN` and join the approach to runway `28R`
 
+---
 #### `APP UPLOAD` Configuration Settings
 
 `APP_SCENARIO`: see `DEP_SCENARIO` above for usage
