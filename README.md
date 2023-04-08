@@ -83,6 +83,10 @@ __[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 `NUM_DEP`: the number of IFR departures generated, may ultimately be slightly less than this value
 
+`GATE_REPLACE`: any gates listed here will be replaced by the value after the colon (`:`); useful when a gate may have multiple definitions
+
+- `GATE_REPLACE=A1:A1V,A6:A6S`: planes parking at gate `A1` will be assigned `A1V` in the CSV output file
+
 #### `DEP VFR` Configuration Settings
 
 `NUM_VFR`: the number of VFR aircraft generated, cannot be greater than the number of available GA parking spots
