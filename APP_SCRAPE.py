@@ -127,7 +127,7 @@ except Exception:
 
 wait()
 
-num_acft = int(read_config_value('NUM_ARR'))
+num_acft = int(read_config_value('NUM_APP'))
 filtered_urls = list()
 
 for i in range(0, -(-(num_acft + 15) // 40)):
@@ -260,7 +260,7 @@ for plane in s_sorted:
         init_spawn_delay = delay
     s_out += '\n' + ','.join(str(x) for x in plane)
     
-out_file = s_out.split('\n')[1].split(',')[3][1:] + '_ARR_TWR_' \
+out_file = s_out.split('\n')[1].split(',')[3][1:] + '_APP_' \
     + time.strftime('%y%m%d-%H%M', time.gmtime()) + '.csv'
 print('Writing aircraft data to \'scenarios/' + str(out_file) + '\'.')
 

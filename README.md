@@ -2,11 +2,11 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.3.6** - 04/07/2023
+**Version 0.4.0** - 04/08/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*.
 
-__[Download v0.3.6](https://github.com/glott/FAST/releases/latest/download/FAST.zip)__ 
+__[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.zip)__ 
 
 ---
 ### Installation
@@ -15,19 +15,28 @@ __[Download v0.3.6](https://github.com/glott/FAST/releases/latest/download/FAST.
 2) Move the `FAST` folder to a directory of your choosing. The `FAST.txt` configuration file must be saved in the `FAST` folder or in your `Downloads` folder.  
 3) Download and install the latest version of [Python](https://www.python.org/downloads/).
 4) Download and install the latest version of [Firefox](https://www.mozilla.org/en-US/firefox/new/) or [Chrome](https://www.google.com/chrome/).
+5) `FAST` will automatically update files after running any file. 
 
 ---
 ### File Descriptions/Usage
 
-**DEP_SCRAPE.py**: Generates a CSV file containing aircraft data for the next 40 departures from a specified airport.
+**APP_SCRAPE.py**: Generates a CSV file containing aircraft data for arrivals from a specified airport. The arrival data is specifically targeted for nearby inbound arrivals joining a final approach course. This is useful for generating S1/S2 files. 
+
+**ARR_SCRAPE.py**: Generates a CSV file containing aircraft data for arrivals from a specified airport. The arrival data is specifically targeted for distant inbound arrivals established on a STAR or other routing. This is useful for generating S3 files. 
+
+**DEP_SCRAPE.py**: Generates a CSV file containing aircraft data for IFR departures from a specified airport.
 
 **DEP_VFR.py**: Generates a CSV file containing aircraft data for a specified number of VFR departures.
 
-**DEP_UPLOAD.py**: Uploads departure CSV files to [vNAS Data Admin](https://data-admin.virtualnas.net/).
+**APP_UPLOAD.py**: Uploads approach (`APP_SCRAPE`) CSV files to [vNAS Data Admin](https://data-admin.virtualnas.net/).
 
-**ARR_SCRAPE.py**: Generates a CSV file containing aircraft data for the previous 40 arrivals from a specified airport. The arrival data is specifically targeted for nearby inbound arrivals joining a final approach course.
+**ARR_UPLOAD.py**: Uploads approach (`ARR_SCRAPE`) CSV files to [vNAS Data Admin](https://data-admin.virtualnas.net/).
+
+**DEP_UPLOAD.py**: Uploads departure (`DEP_SCRAPE` and `DEP_VFR`) CSV files to [vNAS Data Admin](https://data-admin.virtualnas.net/).
 
 **FAST.txt**: Configuration file for all `FAST` settings. See below for more specific information.
+
+**FAST_UPDATE.py**: Updates all `FAST` files, merging previous configuration settings into a new configuration file. 
 
 ---
 ### `FAST.txt` Configuration File
@@ -42,7 +51,7 @@ __[Download v0.3.6](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - Any text after the equals sign (`=`) is included in your configuration setting.
 
-#### Global Configuration Settings
+#### `GLOBAL` Configuration Settings
 
 `AIRPORT`: the specified airport for the scenario being generated
 
@@ -60,15 +69,25 @@ __[Download v0.3.6](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - `SLOW_INTERNET_FACTOR=2`: pages load `2` times slower than normal
 
-#### `DEP SCRAPE` Configuration Settings
+#### `LOGIN` Configuration Settings
 
 `FLIGHTAWARE_USER`: FlightAware username
 
 `FLIGHTAWARE_PASS`: FlightAware password
 
+`VATSIM_USER`: VATSIM CID
+
+`VATSIM_PASS`: VATSIM password
+
+#### `DEP SCRAPE` Configuration Settings
+
 `NUM_DEP`: the number of IFR departures generated, may ultimately be slightly less than this value
 
 #### `DEP VFR` Configuration Settings
+
+`NUM_VFR`: the number of VFR aircraft generated, cannot be greater than the number of available GA parking spots
+
+- `NUM_VFR=20`: 20 VFR departures will be generated (less will be generated if there are fewer than 20 available GA parking spots)
 
 `GA_PARKING`: this is a list of pre-defined GA parking spots in your aircraft file, all separated by commas (`,`)
 
@@ -77,10 +96,6 @@ __[Download v0.3.6](https://github.com/glott/FAST/releases/latest/download/FAST.
 `GA_PARKING_RESERVED`: these GA parking spots will not be utilize in generating VFR aircraft
 
 - `GA_PARKING_RESERVED=SIG1,41-1`: parking spots `SIG1` and `41-1` would not be utilized
-
-`NUM_VFR`: the number of VFR aircraft generated, cannot be greater than the number of available GA parking spots
-
-- `NUM_VFR=20`: 20 VFR departures will be generated (less will be generated if there are fewer than 20 available GA parking spots)
 
 `SPAWN_DELAY_RANGE`: spawn delays (in seconds) will be randomly generated between this range of numbers, separated by a hyphen (`-`)
 
@@ -95,10 +110,6 @@ __[Download v0.3.6](https://github.com/glott/FAST/releases/latest/download/FAST.
 - The default values included in the default configuration file approximately represents common piston aircraft in the U.S.
 
 #### `DEP UPLOAD` Configuration Settings
-
-`VATSIM_USER`: VATSIM CID
-
-`VATSIM_PASS`: VATSIM password
 
 `DEP_SCENARIO`: the scenario ID that has already been created in the vNAS Data Admin
 
@@ -122,11 +133,9 @@ __[Download v0.3.6](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - This is useful for spawning in aircraft immediately into a file
 
-#### `ARR SCRAPE` Configuration Settings
+#### `APP SCRAPE` Configuration Settings
 
-`FLIGHTAWARE_USER` and `FLIGHTAWARE_PASS` must be completed in the `DEP SCRAPE` section of the configuration file
-
-`NUM_ARR`: the number of IFR arr generated, may ultimately be slightly less than this value
+`NUM_APP`: the number of IFR arrivals generated which spawn on final approach, may ultimately be slightly less than this value
 
 `INTERCEPT_ALT`: this is the lowest altitude that an aircraft will spawn at
 
@@ -138,25 +147,25 @@ __[Download v0.3.6](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - `ROUTER=SERFR:HEMAN:28L,DYAMD:CEPIN:28R`: all aircraft with `SERFR` in their flightplan will fly directly to `HEMAN` and join the approach to runway `28L`; all aircraft with `DYAMD` in their flightplan will fly directly to `CEPIN` and join the approach to runway `28R`
 
-#### `ARR UPLOAD` Configuration Settings
+#### `APP UPLOAD` Configuration Settings
 
-`ARR_SCENARIO`: see `DEP_SCENARIO` above for usage
+`APP_SCENARIO`: see `DEP_SCENARIO` above for usage
 
-`ARR_CSV_FILE`: see `DEP_CSV_FILE` above for usage
+`APP_CSV_FILE`: see `DEP_CSV_FILE` above for usage
 
-`ARR_TIME_COMPRESSION`: see `DEP_TIME_COMPRESSION` above for usage
+`APP_TIME_COMPRESSION`: see `DEP_TIME_COMPRESSION` above for usage
 
-- For busy airports, `ARR_TIME_COMPRESSION` should likely be set to `1`
+- For busy airports, `APP_TIME_COMPRESSION` should likely be set to `1`
 
-`ARR_TIME_OFFSET`: see `DEP_TIME_OFFSET` above for usage
+`APP_TIME_OFFSET`: see `DEP_TIME_OFFSET` above for usage
 
-- `ARR_TIME_OFFSET=0` is the recommended value for most situations
+- `APP_TIME_OFFSET=0` is the recommended value for most situations
 
-`MAX_DELAY`: this can be used to reduce the gap between arrivals
+`APP_MAX_DELAY`: this can be used to reduce the gap between arrivals
 
-- `MAX_DELAY=150`: two aircraft will have at most a `150` second delay between each other
+- `APP_MAX_DELAY=150`: two aircraft will have at most a `150` second delay between each other
 
-- This setting should be utilized before modifying `ARR_TIME_COMPRESSION` or `ARR_TIME_OFFSET`
+- This setting should be utilized before modifying `APP_TIME_COMPRESSION` or `APP_TIME_OFFSET`
 
 `CROSS_RESTRICT`: a list of crossing restrictions for inbound aircraft
 

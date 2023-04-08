@@ -179,20 +179,20 @@ def delete_existing(ident):
         button.click()
 
 # UPLOAD DATA TO vNAS
-print('Opening scenario ' + read_config_value('ARR_SCENARIO') + '.')
+print('Opening scenario ' + read_config_value('APP_SCENARIO') + '.')
 driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
-           + read_config_value('ARR_SCENARIO'))
+           + read_config_value('APP_SCENARIO'))
 
 wait()
 
 try: 
-    file_in = '\\scenarios\\' + read_config_value('ARR_CSV_FILE')
+    file_in = '\\scenarios\\' + read_config_value('APP_CSV_FILE')
     if '.' not in file_in: file_in += '.csv'
     f = open(working_directory + file_in, 'r')
     reader = csv.DictReader(f, delimiter=',')
     wait()
 except Exception:
-    print('Unable to read ' + read_config_value('ARR_CSV_FILE') \
+    print('Unable to read ' + read_config_value('APP_CSV_FILE') \
         + ' from \'scenarios\' subdirectory.\n')
     pass
 
@@ -209,7 +209,7 @@ srs = {}
 for sr in read_config_value('SPEED_RESTRICT').split(','):
     srs[sr.split(':')[0]] = sr.split(':')[1]
 
-max_delay = int(read_config_value('MAX_DELAY'))
+max_delay = int(read_config_value('APP_MAX_DELAY'))
 prev_spawn_delay = 0
 
 for plane in reader:
@@ -226,8 +226,8 @@ for plane in reader:
     set_data(pos, 'aircraftType', plane['type'])
     set_data_drop(pos, 'Standby', 'C')
     true_spawn_delay = round(int(plane['spawn-delay']) \
-        / float(read_config_value('ARR_TIME_COMPRESSION')) \
-        - int(read_config_value('ARR_TIME_OFFSET')))
+        / float(read_config_value('APP_TIME_COMPRESSION')) \
+        - int(read_config_value('APP_TIME_OFFSET')))
     if true_spawn_delay < 0: 
         true_spawn_delay = 0
     if true_spawn_delay - prev_spawn_delay > max_delay:
