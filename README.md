@@ -2,11 +2,11 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.4.0** - 04/08/2023
+**Version 0.4.1** - 04/10/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*.
 
-__[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.zip)__ 
+__[Download v0.4.1](https://github.com/glott/FAST/releases/latest/download/FAST.zip)__ 
 
 ---
 ### Installation
@@ -185,6 +185,42 @@ __[Download v0.4.0](https://github.com/glott/FAST/releases/latest/download/FAST.
 `SPEED_RESTRICT`: a list of speed restrictions for inbound aircraft
 
 - `SPEED_RESTRICT=HEMAN:180 DUYET,CEPIN:180 AXMUL`: aircraft routed via `HEMAN` will maintain `180` knots until `DUYET` (after passing `HEMAN`)
+
+---
+#### `ARR SCRAPE` Configuration Settings
+
+`NUM_ARR`: the number of IFR arrivals generated which spawn at a specified location on an arrival, may ultimately be slightly less than this value
+
+`ARR_PATHS`: the arrival paths that will be searched for in an aircraft's route, the specified spawn in location, and the specified distance before the spawn in location, all separated by colons (`:`), each path is separated by a comma (`,`); the number sign (`#`) can be used as a wildcard for an arrival version number
+
+- `ARR_PATHS=SERFR#:NRRLI:10,ALWYS CEDES ARCHI:ALWYS:10`: aircraft on the `SERFR` arrival (of any version, e.g. `SERFR4`) will spawn in no closer than `10` nm before `NRRLI`; aircraft with the route `ALWYS CEDES ARCHI` in their flightplan will spawn in no closer then `10` nm before `ALWYS`
+
+NOTE: in order to use `ARR SCRAPE`, a `Waypoints.xml` file must be placed in either the `FAST` folder, `%appdata%\vSTARS`, or `%localappdata%\vERAM`; the script will not work without this file included in either of those locations
+
+---
+#### `ARR UPLOAD` Configuration Settings
+
+`ARR_SCENARIO`: see `DEP_SCENARIO` above for usage
+
+`ARR_CSV_FILE`: see `DEP_CSV_FILE` above for usage
+
+`ARR_TIME_COMPRESSION`: see `DEP_TIME_COMPRESSION` above for usage
+
+- For busy airports, `ARR_TIME_COMPRESSION` should likely be set to `1`
+
+`ARR_TIME_OFFSET`: see `DEP_TIME_OFFSET` above for usage
+
+- `ARR_TIME_OFFSET=0` is the recommended value for most situations
+
+`ARR_MAX_DELAY`: this can be used to reduce the gap between arrivals
+
+- `ARR_MAX_DELAY=120`: two aircraft will have at most a `120` second delay between each other
+
+- This setting should be utilized before modifying `ARR_TIME_COMPRESSION` or `ARR_TIME_OFFSET`
+
+`RWY_TRANSITION`: runway transitions can be specified if the arrival requires one
+
+- `RWY_TRANSITION=DYAMD:28R,ALWYS:19L`: aircraft on the `DYAMD` arrival will fly the `28R` transition; aircraft on the `ALWYS` arrival will fly the `19L` transition
 
 ---
 *\* Josh Glottmann is not responsible for any misuse of this software.*
