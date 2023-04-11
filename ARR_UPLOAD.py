@@ -206,8 +206,9 @@ except Exception:
     pass
 
 transitions = {}
-for rt in read_config_value('RWY_TRANSITION').split(','):
-    transitions[rt.split(':')[0]] = rt.split(':')[1]
+if ',' in read_config_value('RWY_TRANSITION'):
+    for rt in read_config_value('RWY_TRANSITION').split(','):
+        transitions[rt.split(':')[0]] = rt.split(':')[1]
 
 current_planes = driver.find_elements('xpath', '//input[@disabled=\'\']')
 existing_planes = list()

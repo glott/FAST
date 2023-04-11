@@ -155,8 +155,9 @@ init_spawn_delay = 0
 print('Scraping departure data at ' + read_config_value('AIRPORT') + '.')
 
 gates = {}
-for gate in read_config_value('GATE_REPLACE').split(','):
-    gates[gate.split(':')[0]] = gate.split(':')[1]
+if ',' in read_config_value('GATE_REPLACE'):
+    for gate in read_config_value('GATE_REPLACE').split(','):
+        gates[gate.split(':')[0]] = gate.split(':')[1]
 
 def get_plane_info(source):
     temp_text = source[source.rindex(r'"route"') - 3000:

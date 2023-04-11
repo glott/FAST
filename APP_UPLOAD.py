@@ -206,12 +206,14 @@ for plane in current_planes:
     existing_planes.append(plane.get_attribute('value'))
 
 crs = {}
-for cr in read_config_value('CROSS_RESTRICT').split(','):
-    crs[cr.split(':')[0]] = cr.split(':')[1]
+if ',' in read_config_value('CROSS_RESTRICT'):
+    for cr in read_config_value('CROSS_RESTRICT').split(','):
+        crs[cr.split(':')[0]] = cr.split(':')[1]
     
 srs = {}
-for sr in read_config_value('SPEED_RESTRICT').split(','):
-    srs[sr.split(':')[0]] = sr.split(':')[1]
+if ',' in read_config_value('SPEED_RESTRICT'):
+    for sr in read_config_value('SPEED_RESTRICT').split(','):
+        srs[sr.split(':')[0]] = sr.split(':')[1]
 
 max_delay = int(read_config_value('APP_MAX_DELAY'))
 prev_spawn_delay = -1
