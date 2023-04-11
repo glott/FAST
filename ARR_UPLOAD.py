@@ -1,18 +1,22 @@
 # IMPORTS AND COMMON FUNCTIONS
-import csv, math, os, pathlib, random, random, re, requests
-import subprocess, sys, time, urllib.request, warnings
+import csv, math, os, pathlib, random, random, re, subprocess
+import sys, time, urllib.request, warnings
 warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 try:
     import imp
+    imp.find_module('requests')
     imp.find_module('selenium')
     imp.find_module('webdriver_manager')
 except ImportError:
     subprocess.check_call([sys.executable, '-m', 'pip', 
+                           'install', 'requests']);
+    subprocess.check_call([sys.executable, '-m', 'pip', 
                            'install', 'selenium']);
     subprocess.check_call([sys.executable, '-m', 'pip', 
                            'install', 'webdriver_manager']);
-    
+
+import requests
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.firefox import GeckoDriverManager

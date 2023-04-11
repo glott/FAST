@@ -1,5 +1,15 @@
 # IMPORTS AND ZIP DOWNLOAD
-import zipfile, os, shutil, urllib.request, requests, sys
+import zipfile, os, shutil, urllib.request, subprocess, sys, warnings
+warnings.filterwarnings('ignore', category=DeprecationWarning)
+
+try:
+    import imp
+    imp.find_module('requests')
+except ImportError:
+    subprocess.check_call([sys.executable, '-m', 'pip', 
+                           'install', 'requests']);
+
+import requests
 
 if len(sys.argv) > 1:
     sys.stdout = open(os.devnull, 'w')
