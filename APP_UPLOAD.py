@@ -210,7 +210,7 @@ for sr in read_config_value('SPEED_RESTRICT').split(','):
     srs[sr.split(':')[0]] = sr.split(':')[1]
 
 max_delay = int(read_config_value('APP_MAX_DELAY'))
-prev_spawn_delay = 0
+prev_spawn_delay = -1
 
 for plane in reader:
     if(len(plane['dct']) == 0 or len(plane['proc']) == 0):
@@ -228,6 +228,8 @@ for plane in reader:
     true_spawn_delay = round(int(plane['spawn-delay']) \
         / float(read_config_value('APP_TIME_COMPRESSION')) \
         - int(read_config_value('APP_TIME_OFFSET')))
+    if prev_spawn_delay == -1:
+        true_spawn_delay = 0
     if true_spawn_delay < 0: 
         true_spawn_delay = 0
     if true_spawn_delay - prev_spawn_delay > max_delay:
