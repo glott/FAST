@@ -181,6 +181,11 @@ def delete_existing(ident):
         driver.execute_script('window.scrollBy(0, -' + 
             str(round(button.size['height'] * 2)) + ');')
         button.click()
+        
+def calc_M(v, alt):
+    temp = (-6.49e-3 * float(alt) * .3048 + 14.9855) + 273.15
+    a = (1.4 * 287.053 * temp) ** .5 * 1.944
+    return round(float(v) / a, 3)
 
 # UPLOAD DATA TO vNAS
 print('Opening scenario ' + read_config_value('ARR_SCENARIO') + '.')
@@ -239,8 +244,9 @@ for plane in reader:
     set_data(pos, 'spawnDelay', true_spawn_delay)
     set_data(pos, 'airportId', plane['arr'][1:])
     set_data(pos, 'expectedApproach', '')
-    driver.find_element('xpath', '//input[@class=\'form-check-input\']') \
-        .click()
+    oap = driver.find_element('xpath', 
+        '//label[contains(text(), \'On Altitude Profile\')]')
+    oap.find_element('xpath', '..//div//input[@type=\'checkbox\']').click()
 
     click_button('Create Flight Plan')
     
@@ -261,7 +267,11 @@ for plane in reader:
     set_data(pos, 'startingConditions.coordinates.lat', plane['lat'])
     set_data(pos, 'startingConditions.coordinates.lon', plane['lon'])
     set_data(pos, 'startingConditions.altitude', plane['ralt'])
-    set_data(pos, 'startingConditions.speed', plane['rspeed'])
+    mach = calc_M(plane['rspeed'], plane['ralt'])
+    if mach < .6:
+        set_data(pos, 'startingConditions.speed', plane['rspeed'])
+    else:
+        set_data(pos, 'startingConditions.mach', mach)      
     set_data(pos, 'startingConditions.heading', plane['hdg'])
     
     proc_str = plane['proc'][0:-1]
