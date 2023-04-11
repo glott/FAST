@@ -247,6 +247,7 @@ for filtered_url in filtered_urls:
     num_planes += 1
     wait(w=random.uniform(1, 2.5))
     
+# FILE OUTPUT
 s_sorted = sorted([i.split(',') for i in s.split('\n')[1:]], \
     key=lambda x: x[9])
 s_out = s.split('\n')[0]

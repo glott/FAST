@@ -208,6 +208,7 @@ for filtered_url in filtered_urls:
     num_planes += 1
     wait(w=random.uniform(1, 2.5))
 
+# FILE OUTPUT
 out_file = s.split('\n')[1].split(',')[2][1:] + '_DEP_IFR_' \
     + time.strftime('%y%m%d-%H%M', time.gmtime()) + '.csv'
 print('Writing aircraft data to \'scenarios/' + str(out_file) + '\'.')
