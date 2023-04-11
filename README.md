@@ -195,7 +195,7 @@ __[Download v0.4.1](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - `ARR_PATHS=SERFR#:NRRLI:10,ALWYS CEDES ARCHI:ALWYS:10`: aircraft on the `SERFR` arrival (of any version, e.g. `SERFR4`) will spawn in no closer than `10` nm before `NRRLI`; aircraft with the route `ALWYS CEDES ARCHI` in their flightplan will spawn in no closer then `10` nm before `ALWYS`
 
-NOTE: in order to use `ARR SCRAPE`, a `Waypoints.xml` file must be placed in either the `FAST` folder, `%appdata%\vSTARS`, or `%localappdata%\vERAM`; the script will not work without this file included in either of those locations
+**NOTE**: in order to use `ARR SCRAPE`, a `Waypoints.xml` file must be placed in either the `FAST` folder, `%appdata%\vSTARS`, or `%localappdata%\vERAM`; the script will not work without this file included in either of those locations
 
 ---
 #### `ARR UPLOAD` Configuration Settings
