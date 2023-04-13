@@ -8,6 +8,7 @@ try:
 except ImportError:
     subprocess.check_call([sys.executable, '-m', 'pip', 
                            'install', 'requests']);
+    os.system('cls')
 
 import requests
 

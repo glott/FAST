@@ -15,6 +15,7 @@ except ImportError:
                            'install', 'selenium']);
     subprocess.check_call([sys.executable, '-m', 'pip', 
                            'install', 'webdriver_manager']);
+    os.system('cls')
 
 import requests
 from selenium import webdriver
@@ -244,7 +245,9 @@ for plane in reader:
     prev_spawn_delay = true_spawn_delay
     set_data(pos, 'spawnDelay', true_spawn_delay)
     set_data(pos, 'airportId', plane['arr'][1:])
-    set_data(pos, 'expectedApproach', plane['proc'])
+    exp_app = 'I' + plane['proc'] if len(plane['proc']) > 0 and \
+        plane['proc'][0].isdigit() else plane['proc']
+    set_data(pos, 'expectedApproach', exp_app)
 
     click_button('Create Flight Plan')
     

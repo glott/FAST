@@ -15,6 +15,7 @@ except ImportError:
                            'install', 'selenium']);
     subprocess.check_call([sys.executable, '-m', 'pip', 
                            'install', 'webdriver_manager']);
+    os.system('cls')
 
 import requests
 from selenium import webdriver
@@ -151,9 +152,11 @@ print('Captured URLs for ' + str(num_acft) + ' planes.')
 s = 'ident,type,dep,arr,alt,speed,route,rules,equip,spawn-delay,' \
     + 'gate,lat,lon,ralt,rspeed,hdg,dct,proc'
 goal_intercept_alt = int(read_config_value('INTERCEPT_ALT'))
-router_long = read_config_value('ROUTER').split(',')
-router = [i.split(':') for i in router_long]
-routes = [i[0] for i in router]
+routes = list()
+if ',' in read_config_value('ROUTER'):
+    router_long = read_config_value('ROUTER').split(',')
+    router = [i.split(':') for i in router_long]
+    routes = [i[0] for i in router]
 
 def find_intercept(tracklog_url):
     wait(w=random.uniform(1, 2.5))

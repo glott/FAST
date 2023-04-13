@@ -15,6 +15,7 @@ except ImportError:
                            'install', 'selenium']);
     subprocess.check_call([sys.executable, '-m', 'pip', 
                            'install', 'webdriver_manager']);
+    os.system('cls')
 
 import requests
 from selenium import webdriver
