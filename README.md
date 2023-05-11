@@ -2,11 +2,11 @@
 
 _by [Josh Glottmann](https://github.com/glott)_
 
-**Version 0.4.5** - 04/13/2023
+**Version 0.4.6** - 05/11/2023
 
 Creates scenario files for [ATCTrainer](https://atctrainer.collinkoldoff.dev/#about) by [Collin Koldoff](https://github.com/collink2451) using data from [FlightAware](https://flightaware.com/)\*.
 
-__[Download v0.4.5](https://github.com/glott/FAST/releases/latest/download/FAST.zip)__ 
+__[Download v0.4.6](https://github.com/glott/FAST/releases/latest/download/FAST.zip)__ 
 
 ---
 ### Installation
@@ -147,15 +147,17 @@ __[Download v0.4.5](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 `NUM_APP`: the number of IFR arrivals generated which spawn on final approach, may ultimately be slightly less than this value
 
-`INTERCEPT_ALT`: this is the lowest altitude that an aircraft will spawn at
+`APP_PATHS`: a list of arrival paths to determine which runway an aircraft lands on
 
-- `INTERCEPT_ALT=4000`: the inbound aircraft's position, time, and altitude at the last data point before reaching (or going below) `4000` feet will be recorded
+- `APP_PATHS=28L:HEMAN DUYET,28R:CEPIN AXMUL`: aircraft that fly closest to the path `HEMAN DUYET` will be assumed to be landing on runway `28L`, aircraft that fly closest to the path `CEPIN AXMUL` will be assumed to be landing on runway `28R`
 
-`ROUTER`: a list of routing information for aircraft to join a final approach course
+`APP_INTC`: this is the lowest altitude that an aircraft will spawn at
 
-- Individual routing format: `ARRIVAL:DIRECT TO:PROCEDURE`
+- `APP_INTC=4000`: the inbound aircraft's position, time, and altitude at the last data point before reaching (or going below) `4000` feet will be recorded
 
-- `ROUTER=SERFR:HEMAN:28L,DYAMD:CEPIN:28R`: all aircraft with `SERFR` in their flightplan will fly directly to `HEMAN` and join the approach to runway `28L`; all aircraft with `DYAMD` in their flightplan will fly directly to `CEPIN` and join the approach to runway `28R`
+`APP_DCT`: a list of routing information for aircraft to join a final approach course
+
+- `APP_DCT=28L:HEMAN,28R:CEPIN`: all aircraft arriving runway `28L` will fly directly to `HEMAN` and join the approach course
 
 ---
 #### `APP UPLOAD` Configuration Settings
