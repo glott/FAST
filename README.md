@@ -101,7 +101,7 @@ __[Download v0.4.5](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 - `GA_PARKING=SIG1,SIG2,SIG3,41-1,41-2,41-3`: this would indicate that GA parking is available at spots `SIG1`, `SIG2`, `SIG3`, `41-1`, `41-2`, and `41-3`
 
-`GA_PARKING_RESERVED`: these GA parking spots will not be utilize in generating VFR aircraft
+`GA_PARKING_RESERVED`: these GA parking spots will not be utilized in generating VFR aircraft
 
 - `GA_PARKING_RESERVED=SIG1,41-1`: parking spots `SIG1` and `41-1` would not be utilized
 
