@@ -5,10 +5,16 @@ warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 try:
     import imp
+    imp.find_module('lxml')
+    imp.find_module('numpy')
     imp.find_module('requests')
     imp.find_module('selenium')
     imp.find_module('webdriver_manager')
 except ImportError:
+    subprocess.check_call([sys.executable, '-m', 'pip', 
+                           'install', 'lxml']);
+    subprocess.check_call([sys.executable, '-m', 'pip', 
+                           'install', 'numpy']);
     subprocess.check_call([sys.executable, '-m', 'pip', 
                            'install', 'requests']);
     subprocess.check_call([sys.executable, '-m', 'pip', 
@@ -17,7 +23,8 @@ except ImportError:
                            'install', 'webdriver_manager']);
     os.system('cls')
 
-import requests
+import requests, numpy as np
+from lxml import html
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.firefox import GeckoDriverManager
@@ -148,15 +155,149 @@ for i in range(0, -(-(num_acft + 15) // 40)):
 
 print('Captured URLs for ' + str(num_acft) + ' planes.')
 
+# GENERATE APPROACH PATHS
+paths = list()
+for path in read_config_value('APP_PATHS').split(','):
+    paths.append(path.split(':'))
+
+waypoints = {}
+waypoints_file = ''
+if os.path.isfile(working_directory + '\\Waypoints.xml'):
+    waypoints_file = working_directory + '\\Waypoints.xml'
+elif os.path.isfile(os.getenv('APPDATA') + '\\vSTARS\\Waypoints.xml'):
+    waypoints_file = os.getenv('APPDATA') + '\\vSTARS\\Waypoints.xml'
+elif os.path.isfile(os.getenv('LOCALAPPDATA') + '\\vERAM\\Waypoints.xml'):
+    waypoints_file = os.getenv('LOCALAPPDATA') + '\\vERAM\\Waypoints.xml'
+else:
+    print('Waypoints.xml not found. ' \
+        + 'Please place Waypoints.xml in your FAST folder.')
+
+with open(waypoints_file, 'r') as file:
+    wxml = file.read()
+    for ws in [row[1] for row in paths]:
+        for w in ws.split(' '):
+            if w in wxml:
+                w_info = wxml.split(w)[1].split('/Waypoint')[0]
+                lat = float(w_info.split(r'Lat="')[1].split(r'"')[0])
+                lon = float(w_info.split(r'Lon="')[1].split(r'"')[0])
+                waypoints[w] = [lat, lon]
+
+# POSITION CALCULATION METHODS
+def haversine(lat1, lon1, lat2, lon2):
+    lon1, lat1, lon2, lat2 = map(math.radians, [lon1, lat1, lon2, lat2])
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = math.sin(dlat / 2) ** 2 + math.cos(lat1) * math.cos(lat2) \
+        * math.sin(dlon / 2) ** 2
+    return 2 * math.asin(math.sqrt(a)) * 3440.07
+
+def get_plane_time(alt, t_str):
+    altitude_json = between(driver.page_source, 'altitude_json = ', ';')
+    alts = altitude_json.replace('[[', '').replace(']]', '') \
+        .replace('],[', ';').split(';')
+    
+    for t_a in alts:
+        if ',' not in t_a:
+            continue
+        a = int(t_a.split(',')[1])
+        if a == int(alt):
+            t = int(int(t_a.split(',')[0]) / 1000)
+            if time.strftime('%M:%S', time.gmtime(t)) in t_str:
+                return t
+    return -1
+
+def read_plane_data(line, latlon=False):
+    if latlon:
+        return [float(line[3]), float(line[4])]
+    lat = float(line[3])
+    lon = float(line[4])
+    hdg = int(line[6].replace('°', ''))
+    spd = int(line[7])
+    k = 1 if 'mph' in driver.find_element('xpath', \
+        '//tr[@class=\'thirdHeader\']').text else 0
+    alt = int('0' + line[8 + k].replace(',', ''))
+    t = get_plane_time(alt, ':'.join(line[1].split(':')[1:]))
+    return [lat, lon, hdg, spd, alt, t]
+
+# APPROACH FINDING METHODS
+def create_line(p1, p2, n):
+    return list(zip(np.linspace(p1[0], p2[0], n + 1), 
+        np.linspace(p1[1], p2[1], n + 1)))
+
+def get_plane_app(url):
+    path_lines = list()
+    xmin_dists = []
+    for path in paths:
+        page = requests.get(url)
+        tree = html.fromstring(re.sub(
+            r'<span class="hide-for-medium-up">.+?(?=span>)', '<span><', 
+            str(page.content).replace('\\t', '\t').replace('\\n', '\n')))
+        
+        elems = list()
+        o_elems = tree.xpath('//tr[@class=\'smallrow1\']')
+        for elem in o_elems:
+            v = elem.text_content().strip().replace('\t', '') \
+                .replace('\n\n', '\n').replace('\n ', '\n') \
+                .replace('\xa0', '')
+            elems.append(re.sub(' +', ' ', re.sub(r'[nsew].*arr ', '', \
+                re.sub(r'[^A-Za-z0-9 :.-]', '  ', v))))
+        
+        app_path = path[1].split(' ')
+        min_dist = [1e6] * len(app_path)
+        min_dist_idx = [-1] * len(app_path)
+        idx_cut = len(elems) - 20 if len(elems) >= 20 else 0
+    
+        for i in range(len(app_path)):
+            fix = waypoints[app_path[i]]
+            idx = len(elems) - 1
+            
+            while idx >= idx_cut:
+                lat, lon = read_plane_data(elems[idx].split(' '), \
+                    latlon=True)
+                dist = haversine(fix[0], fix[1], lat, lon)
+                if dist < min_dist[i]:
+                    min_dist[i] = dist
+                    min_dist_idx[i] = idx
+                idx -= 1
+
+        if len(min_dist_idx) == 1:
+            xmin_dists.append(min_dist[0])
+            break
+            
+        xmin_dist = 1e6  
+        pts = []
+        line = []
+        for i in range(min(min_dist_idx), max(min_dist_idx) + 1):
+            pts.append(read_plane_data(elems[i].split(' '), latlon=True))
+        for i in range(len(pts) - 1):
+            k = 0 if len(line) == 0 else 1
+            line += create_line(pts[i], pts[i + 1], 10)[k:]
+        
+        path_pts = []
+        path_line = []
+        for pt in app_path:
+            path_pts.append(waypoints[pt])
+        for i in range(len(path_pts) - 1):
+            k = 0 if len(path_line) == 0 else 1
+            path_line += create_line(path_pts[i], path_pts[i + 1], 5)[k:]
+        
+        for pt in line:
+            for p_pt in path_line:
+                dist = haversine(pt[0], pt[1], p_pt[0], p_pt[1])
+                if dist < xmin_dist:
+                    xmin_dist = dist
+        
+        xmin_dists.append(xmin_dist)    
+    return paths[min(range(len(xmin_dists)), key=xmin_dists.__getitem__)][0]
+
 # SCRAPING METHODS
 s = 'ident,type,dep,arr,alt,speed,route,rules,equip,spawn-delay,' \
     + 'gate,lat,lon,ralt,rspeed,hdg,dct,proc'
-goal_intercept_alt = int(read_config_value('INTERCEPT_ALT'))
-routes = list()
-if ',' in read_config_value('ROUTER'):
-    router_long = read_config_value('ROUTER').split(',')
-    router = [i.split(':') for i in router_long]
-    routes = [i[0] for i in router]
+goal_intercept_alt = int(read_config_value('APP_INTC'))
+routes = {}
+if ',' in read_config_value('APP_DCT'):
+    for route in read_config_value('APP_DCT').split(','):
+        routes[route.split(':')[0]] = route.split(':')[1]
 
 def find_intercept(tracklog_url):
     wait(w=random.uniform(1, 2.5))
@@ -225,9 +366,9 @@ def get_plane_info(source):
         pass
 
     dct, proc = '', ''
-    for i in range(0, len(routes)):
-        if routes[i] in route:
-            dct, proc = router[i][1], router[i][2]
+    if len(routes) > 0:
+        proc = get_plane_app(driver.current_url)
+        dct = routes[proc]
     
     return ','.join([ident, acft, dep, arr, alt, speed, route, 
         'I', 'L', str(rtime), gate, str(lat), str(lon), str(ralt), 
@@ -253,7 +394,7 @@ for filtered_url in filtered_urls:
         + plane.split(',')[1] + ', ' + plane.split(',')[4])
     num_planes += 1
     wait(w=random.uniform(1, 2.5))
-    
+
 # FILE OUTPUT
 s_sorted = sorted([i.split(',') for i in s.split('\n')[1:]], \
     key=lambda x: x[9])
