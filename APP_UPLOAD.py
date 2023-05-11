@@ -277,19 +277,19 @@ for plane in reader:
             click_button('Add Command')
             driver.find_element('name', 'aircraft[' + pos \
                 + '].presetCommands[' + str(get_command_current_id(pos)) \
-                + ']').send_keys('CFIX ' + plane['dct'] + ' ' \
+                + '].command').send_keys('CFIX ' + plane['dct'] + ' ' \
                 + crs[plane['dct']] + ' 210')
         
         click_button('Add Command')
         driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
-            + str(get_command_current_id(pos)) + ']') \
+            + str(get_command_current_id(pos)) + '].command') \
             .send_keys('CAPP ' + plane['proc'])
         
         if plane['dct'] in srs:
             click_button('Add Command')
             driver.find_element('name', 'aircraft[' + pos \
                 + '].presetCommands[' + str(get_command_current_id(pos)) \
-                + ']').send_keys('AT ' + plane['dct'] + ' SPD ' \
+                + '].command').send_keys('AT ' + plane['dct'] + ' SPD ' \
                 + srs[plane['dct']])
     
     click_button('Done')

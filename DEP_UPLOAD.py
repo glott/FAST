@@ -246,13 +246,13 @@ for plane in reader:
     if(len(plane['push-taxiway']) != 0):
         click_button('Add Command')
         driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
-        + str(get_command_current_id(pos)) + ']') \
+        + str(get_command_current_id(pos)) + '].command') \
         .send_keys('PUSH ' + plane['push-taxiway'])
     
     if(len(plane['taxi-route']) != 0):
         click_button('Add Command')
         driver.find_element('name', 'aircraft[' + pos + '].presetCommands[' 
-        + str(get_command_current_id(pos)) + ']') \
+        + str(get_command_current_id(pos)) + '].command') \
         .send_keys('TAXI ' + plane['taxi-route'])
     click_button('Done')
     
