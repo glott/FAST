@@ -5,10 +5,16 @@ warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 try:
     import imp
+    imp.find_module('lxml')
+    imp.find_module('numpy')
     imp.find_module('requests')
     imp.find_module('selenium')
     imp.find_module('webdriver_manager')
 except ImportError:
+    subprocess.check_call([sys.executable, '-m', 'pip', 
+                           'install', 'lxml']);
+    subprocess.check_call([sys.executable, '-m', 'pip', 
+                           'install', 'numpy']);
     subprocess.check_call([sys.executable, '-m', 'pip', 
                            'install', 'requests']);
     subprocess.check_call([sys.executable, '-m', 'pip', 
@@ -17,7 +23,8 @@ except ImportError:
                            'install', 'webdriver_manager']);
     os.system('cls')
 
-import requests
+import requests, numpy as np
+from lxml import html
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.firefox import GeckoDriverManager
