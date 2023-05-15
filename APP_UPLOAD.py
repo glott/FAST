@@ -304,6 +304,7 @@ for plane in reader:
                 + srs[plane['dct']])
     
     click_button('Done')
+    i += 1
     
 click_button('Save')
 f.close()

@@ -308,6 +308,7 @@ for plane in reader:
     set_data(pos, 'startingConditions.navigationPath', dct_proc + proc_add)
     
     click_button('Done')
+    i += 1
     
 click_button('Save')
 f.close()
