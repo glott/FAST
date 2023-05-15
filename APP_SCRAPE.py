@@ -375,7 +375,7 @@ def get_plane_info(source):
         str(rspeed), str(hdg), dct, proc])
 
 # SCRAPE AND CREATE AIRCRAFT DATA FILE
-print('Scraping arrival data at ' + read_config_value('AIRPORT') + '.')
+print('Scraping approach data at ' + read_config_value('AIRPORT') + '.')
 
 num_planes = 0
 for filtered_url in filtered_urls:
@@ -418,5 +418,5 @@ os.makedirs(os.path.dirname(out_file), exist_ok=True)
 with open(out_file, 'w') as f: 
     f.write(s_out)
 
-print('Arrival scraping complete!')
+print('Approach scraping complete!')
 driver.quit()
