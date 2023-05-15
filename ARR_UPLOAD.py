@@ -281,6 +281,13 @@ for plane in reader:
     set_data_drop(pos, 'Coordinates', 'Coordinates')
     set_data(pos, 'startingConditions.coordinates.lat', plane['lat'])
     set_data(pos, 'startingConditions.coordinates.lon', plane['lon'])
+    
+    if '*' in plane['proc']:
+        dalt = int(plane['proc'][1:] + '00')
+        if dalt < int(plane['ralt']):
+            plane['ralt'] = dalt
+        plane['proc'] = ' '
+    
     set_data(pos, 'startingConditions.altitude', plane['ralt'])
     mach = calc_M(plane['rspeed'], plane['ralt'])
     if mach < .6:
@@ -297,6 +304,7 @@ for plane in reader:
     dct_proc = plane['dct'] + ' ' + plane['proc']
     if plane['dct'] + ' ' in plane['proc']:
         dct_proc = plane['proc']
+    dct_proc = dct_proc.rstrip()
     set_data(pos, 'startingConditions.navigationPath', dct_proc + proc_add)
     
     click_button('Done')

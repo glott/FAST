@@ -225,8 +225,15 @@ def get_plane_data(rte, url):
     fix = [0, 0]
     offset = 0
     for path in paths:
-        if re.search(path[0].replace('#', '[0-9]'), rte):
+        if not '*' in path[0] and re.search(path[0]
+            .replace('#', '[0-9]'), rte):
             proc = re.search(path[0].replace('#', '[0-9]'), rte).group(0)
+            dct = path[1]
+            fix = waypoints[path[1]]
+            offset = float(path[2])
+            break
+        elif '*' in path[0]:
+            proc = path[0]
             dct = path[1]
             fix = waypoints[path[1]]
             offset = float(path[2])
@@ -253,8 +260,11 @@ s = 'ident,type,dep,arr,alt,speed,route,rules,equip,spawn-delay,' \
     + 'gate,lat,lon,ralt,rspeed,hdg,dct,proc'
 
 def get_plane_info(source):
-    temp_text = source[source.rindex(r'"route"') - 3000:
-                       source.rindex(r'"route"') + 1500]
+    try: 
+        temp_text = source[source.rindex(r'"route"') - 3000:
+                           source.rindex(r'"route"') + 1500]
+    except Exception:
+        return ''
 
     ident = between(temp_text, r'"displayIdent":"', r'"')
     flight_plan = between(temp_text, r'"flightPlan":', r'"fuelBurn"')
