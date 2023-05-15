@@ -311,8 +311,8 @@ for filtered_url in filtered_urls:
         continue
     
     s += '\n' + plane
-    print('Scraped ' + plane.split(',')[0] + '\t' \
-        + plane.split(',')[2] + '-' + plane.split(',')[3] + ', ' \
+    print(f'[{num_planes + 1}/{num_acft}]\tScraped ' + plane.split(',')[0] 
+        + '\t' + plane.split(',')[2] + '-' + plane.split(',')[3] + ', ' \
         + plane.split(',')[1] + ', ' + plane.split(',')[4])
     num_planes += 1
     wait(w=random.uniform(1, 2.5))
