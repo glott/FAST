@@ -197,10 +197,13 @@ driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
 
 wait()
 
+row_count = 0
 try: 
     file_in = '\\scenarios\\' + read_config_value('DEP_CSV_FILE')
     if '.' not in file_in: file_in += '.csv'
     f = open(working_directory + file_in, 'r')
+    row_count = len(f.readlines()) - 1
+    f.seek(0)
     reader = csv.DictReader(f, delimiter=',')
     wait()
 except Exception:
@@ -213,11 +216,12 @@ existing_planes = list()
 for plane in current_planes:
     existing_planes.append(plane.get_attribute('value'))
 
+i = 1
 for plane in reader:
     delete_existing(plane['ident'])
     click_button('Add Aircraft')
     wait(w=0)
-    print('Uploading data for ' + plane['ident'] + '.')
+    print(f'[{i}/{row_count}]\tUploading data for {plane["ident"]}.')
     
     pos = get_plane_id()
     set_data(pos, 'aircraftId', plane['ident'])
@@ -262,6 +266,7 @@ for plane in reader:
         + str(get_command_current_id(pos)) + '].command') \
         .send_keys('TAXI ' + plane['taxi-route'])
     click_button('Done')
+    i += 1
     
 click_button('Save')
 f.close()

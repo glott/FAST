@@ -197,10 +197,13 @@ driver.get('https://data-admin.virtualnas.net/training/scenarios/' \
 
 wait()
 
+row_count = 0
 try: 
     file_in = '\\scenarios\\' + read_config_value('APP_CSV_FILE')
     if '.' not in file_in: file_in += '.csv'
     f = open(working_directory + file_in, 'r')
+    row_count = len(f.readlines()) - 1
+    f.seek(0)
     reader = csv.DictReader(f, delimiter=',')
     wait()
 except Exception:
@@ -226,6 +229,7 @@ if ',' in read_config_value('SPEED_RESTRICT'):
 max_delay = int(read_config_value('APP_MAX_DELAY'))
 prev_spawn_delay = -1
 
+i = 1
 for plane in reader:
     if(len(plane['dct']) == 0 or len(plane['proc']) == 0):
         print('Skipping ' + plane['ident'] + ', invalid procedure.')
@@ -233,7 +237,7 @@ for plane in reader:
     delete_existing(plane['ident'])
     click_button('Add Aircraft')
     wait(w=0)
-    print('Uploading data for ' + plane['ident'] + '.')
+    print(f'[{i}/{row_count}]\tUploading data for {plane["ident"]}.')
     
     pos = get_plane_id()
     set_data(pos, 'aircraftId', plane['ident'])
