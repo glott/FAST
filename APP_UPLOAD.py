@@ -273,7 +273,8 @@ for plane in reader:
     equip = '/' + plane['equip'] if len(plane['equip']) > 0 else ''
     set_data(pos, 'flightplan.aircraftType', plane['type'] + equip)
     set_data(pos, 'flightplan.route', plane['route'])
-    set_data(pos, 'flightplan.remarks', '/v/ Gate ' + plane['gate'])
+    set_data(pos, 'flightplan.remarks', '/v/ Gate ' + plane['gate']
+            + ', ' + plane['proc'])
     
     set_data_drop(pos, 'Coordinates', 'Coordinates')
     set_data(pos, 'startingConditions.coordinates.lat', plane['lat'])
