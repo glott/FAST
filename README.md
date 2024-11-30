@@ -77,9 +77,9 @@ __[Download v0.4.7](https://github.com/glott/FAST/releases/latest/download/FAST.
 
 `FLIGHTAWARE_PASS`: FlightAware password
 
-`VATSIM_USER`: VATSIM CID
+`SIM_USER`: SIM CID
 
-`VATSIM_PASS`: VATSIM password
+`SIM_PASS`: SIM password
 
 ---
 #### `DEP SCRAPE` Configuration Settings

@@ -117,23 +117,23 @@ else:
         .install(), service_log_path=os.devnull);
 driver.minimize_window()
 
-# LOGIN TO VATSIM AND vNAS
+# LOGIN TO SIM AND vNAS
 print('Opening vNAS login page.')
 driver.get('https://data-admin.virtualnas.net/login')
 
-click_button('Login with VATSIM')
+click_button('Login with SIM')
 wait()
 
 try:
-    print('Logging in to VATSIM.')
-    driver.find_element('id', 'vatsim-id') \
-        .send_keys(read_config_value('VATSIM_USER'))
+    print('Logging in to SIM.')
+    driver.find_element('id', 'sim-id') \
+        .send_keys(read_config_value('SIM_USER'))
     driver.find_element('id', 'password') \
-        .send_keys(read_config_value('VATSIM_PASS'))
+        .send_keys(read_config_value('SIM_PASS'))
     click_button('Sign in')
-    print('Successfully logged in to VATSIM.')
+    print('Successfully logged in to SIM.')
 except Exception:
-    print('Unsuccessfully logged in to VATSIM.')
+    print('Unsuccessfully logged in to SIM.')
 
 wait(w=5)
 

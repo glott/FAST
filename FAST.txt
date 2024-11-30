@@ -13,8 +13,8 @@ SLOW_INTERNET_FACTOR=1
 #################### LOGIN ##################
 FLIGHTAWARE_USER=username
 FLIGHTAWARE_PASS=password
-VATSIM_USER=1234567
-VATSIM_PASS=000000
+SIM_USER=1234567
+SIM_PASS=000000
 
 ################# DEP SCRAPE ################
 NUM_DEP=50
